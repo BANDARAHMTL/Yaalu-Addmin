@@ -1,8 +1,174 @@
-import { Customer, Invoice, Merchant, Order, Product, Rider, SystemStats } from '../types';
+import {
+  Customer,
+  Invoice,
+  Merchant,
+  Order,
+  PaymentTransaction,
+  Product,
+  Rider,
+  SystemStats,
+  UserAccount,
+} from '../types';
 
 const API_BASE_URL = 'http://localhost:3001';
 
-// Initial Mock / Seed Data for instant out-of-the-box rich presentation
+// Initial Users Mock Data
+const INITIAL_USERS: UserAccount[] = [
+  {
+    id: 'u-101',
+    email: 'admin@yaalu.lk',
+    fullName: 'System Super Admin',
+    phone: '+94 77 000 1122',
+    role: 'ADMIN',
+    status: 'ACTIVE',
+    avatarUrl: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150',
+    createdAt: '2026-08-01T08:00:00Z',
+    updatedAt: '2026-09-01T12:00:00Z',
+  },
+  {
+    id: 'u-102',
+    email: 'sunil@freshharvest.lk',
+    fullName: 'Sunil Perera',
+    phone: '+94 77 123 4567',
+    role: 'SHOP',
+    status: 'ACTIVE',
+    avatarUrl: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150',
+    shopProfile: {
+      shopName: 'Fresh Harvest Supermarket',
+      businessType: 'Supermarket & Grocery',
+      registrationNo: 'PV-88921',
+      shopAddress: 'No. 45, Galle Road, Colombo 03',
+      isVerified: true,
+    },
+    createdAt: '2026-08-10T10:00:00Z',
+    updatedAt: '2026-09-02T10:00:00Z',
+  },
+  {
+    id: 'u-103',
+    email: 'kasun.b@yaalu.lk',
+    fullName: 'Kasun Bandara',
+    phone: '+94 77 345 6789',
+    role: 'RIDER',
+    status: 'ACTIVE',
+    avatarUrl: 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150',
+    riderProfile: {
+      vehicleType: 'MOTORBIKE',
+      vehicleNumber: 'WP BCD-4512',
+      licenseNumber: 'B-8839201',
+      isApproved: true,
+    },
+    createdAt: '2026-08-12T08:00:00Z',
+    updatedAt: '2026-09-03T11:00:00Z',
+  },
+  {
+    id: 'u-104',
+    email: 'anura.k@gmail.com',
+    fullName: 'Anura Kumara',
+    phone: '+94 77 998 1122',
+    role: 'CUSTOMER',
+    status: 'ACTIVE',
+    customerProfile: {
+      deliveryAddress: '24/B, Flower Road, Colombo 07',
+      city: 'Colombo',
+      totalOrders: 14,
+    },
+    createdAt: '2026-08-01T12:00:00Z',
+    updatedAt: '2026-09-04T08:30:00Z',
+  },
+  {
+    id: 'u-105',
+    email: 'dilan.m@yaalu.lk',
+    fullName: 'Dilan Madushanka',
+    phone: '+94 75 901 2345',
+    role: 'RIDER',
+    status: 'PENDING',
+    riderProfile: {
+      vehicleType: 'SCOOTER',
+      vehicleNumber: 'WP BEG-1120',
+      licenseNumber: 'B-4458920',
+      isApproved: false,
+    },
+    createdAt: '2026-09-03T16:45:00Z',
+    updatedAt: '2026-09-03T16:45:00Z',
+  },
+  {
+    id: 'u-106',
+    email: 'royalspice@gmail.com',
+    fullName: 'Mohamed Farook',
+    phone: '+94 76 554 1122',
+    role: 'SHOP',
+    status: 'PENDING',
+    shopProfile: {
+      shopName: 'Royal Spice & Grocery Hub',
+      businessType: 'Wholesale & Spices',
+      registrationNo: 'BR-99120',
+      shopAddress: '78 Main Street, Pettah, Colombo 11',
+      isVerified: false,
+    },
+    createdAt: '2026-09-02T14:20:00Z',
+    updatedAt: '2026-09-02T14:20:00Z',
+  },
+];
+
+// Initial Payment Verification Mock Data
+const INITIAL_PAYMENTS: PaymentTransaction[] = [
+  {
+    id: 'pay-501',
+    invoiceId: 'inv-101',
+    orderId: 'ord-901',
+    merchantName: 'Fresh Harvest Supermarket',
+    customerName: 'Anura Kumara',
+    amount: 3840,
+    method: 'CARD',
+    status: 'VERIFIED',
+    referenceNo: 'TXN-9988231',
+    verifiedBy: 'System Gateway (IPG)',
+    verifiedAt: '2026-09-04T08:31:00Z',
+    createdAt: '2026-09-04T08:30:00Z',
+  },
+  {
+    id: 'pay-502',
+    invoiceId: 'inv-102',
+    orderId: 'ord-902',
+    merchantName: 'Green Leaf Organic Store',
+    customerName: 'Sujatha Alwis',
+    amount: 2260,
+    method: 'BANK_TRANSFER',
+    status: 'PENDING_VERIFICATION',
+    referenceNo: 'SLIP-COMM-44912',
+    bankName: 'Commercial Bank of Ceylon',
+    slipUrl: 'https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&auto=format&fit=crop&q=80',
+    createdAt: '2026-09-04T09:10:00Z',
+  },
+  {
+    id: 'pay-503',
+    invoiceId: 'inv-103',
+    orderId: 'ord-903',
+    merchantName: 'Fresh Harvest Supermarket',
+    customerName: 'Raveen Fernando',
+    amount: 1440,
+    method: 'QR_PAY',
+    status: 'PENDING_VERIFICATION',
+    referenceNo: 'LANKAQR-88912',
+    bankName: 'Sampath Bank',
+    slipUrl: 'https://images.unsplash.com/photo-1554224154-26032ffc0d07?w=600&auto=format&fit=crop&q=80',
+    createdAt: '2026-09-04T09:48:00Z',
+  },
+  {
+    id: 'pay-504',
+    merchantName: 'City Bakers & Mart',
+    customerName: 'Kamal Gunaratne',
+    amount: 5800,
+    method: 'BANK_TRANSFER',
+    status: 'REJECTED',
+    referenceNo: 'SLIP-INVALID-001',
+    rejectionReason: 'Bank slip transfer amount did not match invoice total',
+    verifiedBy: 'Administrator',
+    verifiedAt: '2026-09-03T15:20:00Z',
+    createdAt: '2026-09-03T14:00:00Z',
+  },
+];
+
 const INITIAL_MERCHANTS: Merchant[] = [
   {
     id: 'm-001',
@@ -148,9 +314,12 @@ const INITIAL_PRODUCTS: Product[] = [
     merchantId: 'm-001',
     merchantName: 'Fresh Harvest Supermarket',
     name: 'Keeri Samba Rice (Premium)',
+    sku: 'RICE-KS-001',
     price: 320,
+    costPrice: 280,
     unit: 'kg',
     stock: 250,
+    lowStockThreshold: 30,
     category: 'Rice & Grains',
     isActive: true,
     imageUrl: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400&auto=format&fit=crop&q=80',
@@ -163,9 +332,12 @@ const INITIAL_PRODUCTS: Product[] = [
     merchantId: 'm-001',
     merchantName: 'Fresh Harvest Supermarket',
     name: 'Fresh Red Onions (Local)',
+    sku: 'VEG-ON-002',
     price: 480,
+    costPrice: 390,
     unit: 'kg',
     stock: 85,
+    lowStockThreshold: 15,
     category: 'Vegetables',
     isActive: true,
     imageUrl: 'https://images.unsplash.com/photo-1618512496248-a07fe83aa8cb?w=400&auto=format&fit=crop&q=80',
@@ -178,9 +350,12 @@ const INITIAL_PRODUCTS: Product[] = [
     merchantId: 'm-002',
     merchantName: 'Green Leaf Organic Store',
     name: 'Organic Cavendish Bananas',
+    sku: 'FRU-BAN-003',
     price: 260,
+    costPrice: 200,
     unit: 'kg',
     stock: 40,
+    lowStockThreshold: 10,
     category: 'Fruits',
     isActive: true,
     imageUrl: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400&auto=format&fit=crop&q=80',
@@ -193,9 +368,12 @@ const INITIAL_PRODUCTS: Product[] = [
     merchantId: 'm-002',
     merchantName: 'Green Leaf Organic Store',
     name: 'Pure Ceylon Cinnamon Sticks',
+    sku: 'SPC-CIN-004',
     price: 750,
+    costPrice: 580,
     unit: 'pack (100g)',
     stock: 65,
+    lowStockThreshold: 10,
     category: 'Spices',
     isActive: true,
     imageUrl: 'https://images.unsplash.com/photo-1509358271058-acd22cc93898?w=400&auto=format&fit=crop&q=80',
@@ -208,9 +386,12 @@ const INITIAL_PRODUCTS: Product[] = [
     merchantId: 'm-004',
     merchantName: 'City Bakers & Mart',
     name: 'Highland Fresh Full Cream Milk 1L',
+    sku: 'DAI-MLK-005',
     price: 490,
+    costPrice: 420,
     unit: 'pack',
     stock: 120,
+    lowStockThreshold: 20,
     category: 'Dairy',
     isActive: true,
     imageUrl: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400&auto=format&fit=crop&q=80',
@@ -232,6 +413,7 @@ const INITIAL_ORDERS: Order[] = [
     status: 'delivered',
     totalAmount: 3840,
     riderName: 'Kasun Bandara',
+    paymentMethod: 'CARD',
     items: [
       { id: 'item-1', productName: 'Keeri Samba Rice (Premium)', quantity: 5, unitPrice: 320, subtotal: 1600 },
       { id: 'item-2', productName: 'Fresh Red Onions (Local)', quantity: 2, unitPrice: 480, subtotal: 960 },
@@ -252,6 +434,7 @@ const INITIAL_ORDERS: Order[] = [
     status: 'processing',
     totalAmount: 2260,
     riderName: 'Nuwan Pradeep',
+    paymentMethod: 'BANK_TRANSFER',
     items: [
       { id: 'item-4', productName: 'Organic Cavendish Bananas', quantity: 3, unitPrice: 260, subtotal: 780 },
       { id: 'item-5', productName: 'Pure Ceylon Cinnamon Sticks', quantity: 2, unitPrice: 750, subtotal: 1500 },
@@ -269,6 +452,7 @@ const INITIAL_ORDERS: Order[] = [
     deliveryAddress: '88 Negombo Road, Wattala',
     status: 'pending',
     totalAmount: 1440,
+    paymentMethod: 'QR_PAY',
     items: [
       { id: 'item-6', productName: 'Fresh Red Onions (Local)', quantity: 3, unitPrice: 480, subtotal: 1440 },
     ],
@@ -288,7 +472,7 @@ const INITIAL_INVOICES: Invoice[] = [
     amount: 3840,
     status: 'paid',
     dueDate: '2026-09-10',
-    paidAt: '2026-09-04T09:15:00Z',
+    paidAt: '2026-09-04T08:30:00Z',
     notes: 'Paid via Card / Online Gateway',
     createdAt: '2026-09-04T08:30:00Z',
   },
@@ -301,7 +485,7 @@ const INITIAL_INVOICES: Invoice[] = [
     amount: 2260,
     status: 'pending',
     dueDate: '2026-09-05',
-    notes: 'Cash on Delivery (Pending Rider Collection)',
+    notes: 'Bank Transfer Slip Uploaded (Awaiting Verification)',
     createdAt: '2026-09-04T09:05:00Z',
   },
   {
@@ -351,8 +535,9 @@ const INITIAL_CUSTOMERS: Customer[] = [
   },
 ];
 
-// Local state caching with persistent memory fallback
 class AdminApiService {
+  private users: UserAccount[] = INITIAL_USERS;
+  private payments: PaymentTransaction[] = INITIAL_PAYMENTS;
   private merchants: Merchant[] = INITIAL_MERCHANTS;
   private riders: Rider[] = INITIAL_RIDERS;
   private products: Product[] = INITIAL_PRODUCTS;
@@ -362,14 +547,23 @@ class AdminApiService {
 
   // ─── Stats ───────────────────────────────────────────────
   async getStats(): Promise<SystemStats> {
-    const totalRevenue = this.orders
-      .filter((o) => o.status === 'delivered')
-      .reduce((sum, o) => sum + o.totalAmount, 0) + 920000;
+    const totalRevenue =
+      this.orders
+        .filter((o) => o.status === 'delivered')
+        .reduce((sum, o) => sum + o.totalAmount, 0) + 920000;
 
-    const activeRiders = this.riders.filter((r) => r.status === 'AVAILABLE' || r.status === 'BUSY').length;
+    const activeRiders = this.riders.filter(
+      (r) => r.status === 'AVAILABLE' || r.status === 'BUSY'
+    ).length;
+
     const pendingApprovals =
       this.merchants.filter((m) => m.status === 'PENDING_APPROVAL').length +
-      this.riders.filter((r) => !r.isApproved).length;
+      this.riders.filter((r) => !r.isApproved).length +
+      this.users.filter((u) => u.status === 'PENDING').length;
+
+    const pendingPaymentsCount = this.payments.filter(
+      (p) => p.status === 'PENDING_VERIFICATION'
+    ).length;
 
     return {
       totalRevenue,
@@ -377,15 +571,135 @@ class AdminApiService {
       totalMerchants: this.merchants.length,
       activeRiders,
       pendingApprovals,
+      pendingPaymentsCount,
+      totalUsers: this.users.length,
       todayOrders: this.orders.length,
       monthlyGrowth: 18.4,
     };
   }
 
+  // ─── User Accounts Management (CRUD & Roles) ─────────────
+  async getUsers(): Promise<UserAccount[]> {
+    return [...this.users];
+  }
+
+  async createUser(data: Partial<UserAccount>): Promise<UserAccount> {
+    const newUser: UserAccount = {
+      id: `u-${Date.now()}`,
+      email: data.email || `user-${Date.now()}@yaalu.lk`,
+      fullName: data.fullName || 'New Yaalu User',
+      phone: data.phone || '+94 77 000 0000',
+      role: data.role || 'CUSTOMER',
+      status: data.status || 'ACTIVE',
+      avatarUrl:
+        data.avatarUrl ||
+        'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150',
+      customerProfile: data.customerProfile,
+      shopProfile: data.shopProfile,
+      riderProfile: data.riderProfile,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    // Auto-sync into role tables if relevant
+    if (newUser.role === 'SHOP' && newUser.shopProfile) {
+      const newShop: Merchant = {
+        id: `m-${Date.now()}`,
+        userId: newUser.id,
+        shopName: newUser.shopProfile.shopName || newUser.fullName,
+        ownerName: newUser.fullName,
+        ownerEmail: newUser.email,
+        ownerPhone: newUser.phone,
+        businessType: newUser.shopProfile.businessType || 'General Retail',
+        shopAddress: newUser.shopProfile.shopAddress || '',
+        registrationNo: newUser.shopProfile.registrationNo || '',
+        status: newUser.status === 'ACTIVE' ? 'ACTIVE' : 'PENDING_APPROVAL',
+        isVerified: newUser.status === 'ACTIVE',
+        totalProducts: 0,
+        totalOrders: 0,
+        revenue: 0,
+        createdAt: new Date().toISOString(),
+      };
+      this.merchants.unshift(newShop);
+    } else if (newUser.role === 'RIDER' && newUser.riderProfile) {
+      const newRider: Rider = {
+        id: `r-${Date.now()}`,
+        userId: newUser.id,
+        fullName: newUser.fullName,
+        phone: newUser.phone || '',
+        email: newUser.email,
+        vehicleType: (newUser.riderProfile.vehicleType as any) || 'MOTORBIKE',
+        vehicleNumber: newUser.riderProfile.vehicleNumber || 'WP XXX-0000',
+        licenseNumber: newUser.riderProfile.licenseNumber || 'B-000000',
+        status: newUser.status === 'ACTIVE' ? 'AVAILABLE' : 'PENDING',
+        isApproved: newUser.status === 'ACTIVE',
+        deliveriesCompleted: 0,
+        rating: 5.0,
+        createdAt: new Date().toISOString(),
+      };
+      this.riders.unshift(newRider);
+    }
+
+    this.users.unshift(newUser);
+    return newUser;
+  }
+
+  async updateUser(id: string, data: Partial<UserAccount>): Promise<UserAccount> {
+    const user = this.users.find((u) => u.id === id);
+    if (!user) throw new Error('User not found');
+    Object.assign(user, data, { updatedAt: new Date().toISOString() });
+    return { ...user };
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    this.users = this.users.filter((u) => u.id !== id);
+    return true;
+  }
+
+  // ─── Payment Transactions & Verification ──────────────────
+  async getPayments(): Promise<PaymentTransaction[]> {
+    return [...this.payments];
+  }
+
+  async verifyPayment(
+    id: string,
+    status: 'VERIFIED' | 'REJECTED',
+    rejectionReason?: string
+  ): Promise<PaymentTransaction> {
+    const payment = this.payments.find((p) => p.id === id);
+    if (!payment) throw new Error('Payment not found');
+
+    payment.status = status;
+    payment.verifiedBy = 'Super Administrator';
+    payment.verifiedAt = new Date().toISOString();
+    if (rejectionReason) payment.rejectionReason = rejectionReason;
+
+    // Sync associated invoice & order if verified
+    if (status === 'VERIFIED') {
+      if (payment.invoiceId) {
+        const inv = this.invoices.find((i) => i.id === payment.invoiceId);
+        if (inv) {
+          inv.status = 'paid';
+          inv.paidAt = new Date().toISOString();
+        }
+      }
+      if (payment.orderId) {
+        const ord = this.orders.find((o) => o.id === payment.orderId);
+        if (ord && ord.status === 'pending') {
+          ord.status = 'confirmed';
+        }
+      }
+    }
+
+    return { ...payment };
+  }
+
   // ─── Merchants ───────────────────────────────────────────
   async getMerchants(): Promise<Merchant[]> {
     try {
-      const res = await fetch(`${API_BASE_URL}/merchants`, { signal: AbortSignal.timeout(2000) });
+      const res = await fetch(`${API_BASE_URL}/merchants`, {
+        signal: AbortSignal.timeout(2000),
+      });
       if (res.ok) {
         const live = await res.json();
         if (Array.isArray(live) && live.length > 0) return live;
@@ -402,7 +716,10 @@ class AdminApiService {
     return { ...m };
   }
 
-  async updateMerchantStatus(id: string, status: 'ACTIVE' | 'PENDING_APPROVAL' | 'SUSPENDED'): Promise<Merchant> {
+  async updateMerchantStatus(
+    id: string,
+    status: 'ACTIVE' | 'PENDING_APPROVAL' | 'SUSPENDED'
+  ): Promise<Merchant> {
     const m = this.merchants.find((item) => item.id === id);
     if (!m) throw new Error('Merchant not found');
     m.status = status;
@@ -435,7 +752,9 @@ class AdminApiService {
   // ─── Products ────────────────────────────────────────────
   async getProducts(): Promise<Product[]> {
     try {
-      const res = await fetch(`${API_BASE_URL}/products`, { signal: AbortSignal.timeout(2000) });
+      const res = await fetch(`${API_BASE_URL}/products`, {
+        signal: AbortSignal.timeout(2000),
+      });
       if (res.ok) {
         const live = await res.json();
         if (Array.isArray(live) && live.length > 0) return live;
@@ -463,9 +782,12 @@ class AdminApiService {
       merchantId: data.merchantId || 'm-001',
       merchantName: data.merchantName || 'Fresh Harvest Supermarket',
       name: data.name || 'Untitled Product',
+      sku: data.sku || `SKU-${Date.now().toString().slice(-4)}`,
       price: data.price || 0,
+      costPrice: data.costPrice || (data.price ? data.price * 0.8 : 0),
       unit: data.unit || 'kg',
       stock: data.stock || 0,
+      lowStockThreshold: data.lowStockThreshold || 10,
       category: data.category || 'General',
       imageUrl: data.imageUrl,
       description: data.description,
@@ -509,7 +831,9 @@ class AdminApiService {
   // ─── Orders ──────────────────────────────────────────────
   async getOrders(): Promise<Order[]> {
     try {
-      const res = await fetch(`${API_BASE_URL}/orders`, { signal: AbortSignal.timeout(2000) });
+      const res = await fetch(`${API_BASE_URL}/orders`, {
+        signal: AbortSignal.timeout(2000),
+      });
       if (res.ok) {
         const live = await res.json();
         if (Array.isArray(live) && live.length > 0) return live;
@@ -543,7 +867,9 @@ class AdminApiService {
   // ─── Invoices ────────────────────────────────────────────
   async getInvoices(): Promise<Invoice[]> {
     try {
-      const res = await fetch(`${API_BASE_URL}/invoices`, { signal: AbortSignal.timeout(2000) });
+      const res = await fetch(`${API_BASE_URL}/invoices`, {
+        signal: AbortSignal.timeout(2000),
+      });
       if (res.ok) {
         const live = await res.json();
         if (Array.isArray(live) && live.length > 0) return live;
@@ -554,7 +880,9 @@ class AdminApiService {
 
   async markInvoicePaid(id: string): Promise<Invoice> {
     try {
-      const res = await fetch(`${API_BASE_URL}/invoices/${id}/pay`, { method: 'PATCH' });
+      const res = await fetch(`${API_BASE_URL}/invoices/${id}/pay`, {
+        method: 'PATCH',
+      });
       if (res.ok) {
         const live = await res.json();
         return live;
@@ -571,7 +899,9 @@ class AdminApiService {
   // ─── Customers ───────────────────────────────────────────
   async getCustomers(): Promise<Customer[]> {
     try {
-      const res = await fetch(`${API_BASE_URL}/customers`, { signal: AbortSignal.timeout(2000) });
+      const res = await fetch(`${API_BASE_URL}/customers`, {
+        signal: AbortSignal.timeout(2000),
+      });
       if (res.ok) {
         const live = await res.json();
         if (Array.isArray(live) && live.length > 0) return live;

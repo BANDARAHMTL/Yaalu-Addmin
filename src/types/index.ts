@@ -1,17 +1,65 @@
 export type Role = 'CUSTOMER' | 'SHOP' | 'RIDER' | 'ADMIN';
 
+export type UserStatus = 'ACTIVE' | 'PENDING' | 'SUSPENDED';
+
 export type RiderStatus = 'PENDING' | 'AVAILABLE' | 'BUSY' | 'OFFLINE' | 'SUSPENDED';
 
 export type OrderStatus = 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
 export type InvoiceStatus = 'pending' | 'paid';
 
-export interface User {
+export type PaymentMethod = 'BANK_TRANSFER' | 'CARD' | 'CASH_ON_DELIVERY' | 'QR_PAY';
+
+export type PaymentVerificationStatus = 'PENDING_VERIFICATION' | 'VERIFIED' | 'REJECTED';
+
+export interface UserAccount {
   id: string;
   email: string;
+  fullName: string;
+  phone?: string;
   role: Role;
+  status: UserStatus;
+  avatarUrl?: string;
   createdAt: string;
   updatedAt: string;
+  customerProfile?: {
+    deliveryAddress?: string;
+    city?: string;
+    totalOrders?: number;
+  };
+  shopProfile?: {
+    shopName: string;
+    businessType?: string;
+    registrationNo?: string;
+    shopAddress?: string;
+    isVerified?: boolean;
+  };
+  riderProfile?: {
+    vehicleType: string;
+    vehicleNumber: string;
+    licenseNumber: string;
+    isApproved: boolean;
+  };
+}
+
+export interface PaymentTransaction {
+  id: string;
+  invoiceId?: string;
+  orderId?: string;
+  merchantId?: string;
+  merchantName: string;
+  customerId?: string;
+  customerName: string;
+  amount: number;
+  method: PaymentMethod;
+  status: PaymentVerificationStatus;
+  referenceNo?: string;
+  bankName?: string;
+  slipUrl?: string;
+  verifiedBy?: string;
+  verifiedAt?: string;
+  rejectionReason?: string;
+  createdAt: string;
 }
 
 export interface Merchant {
@@ -62,9 +110,12 @@ export interface Product {
   merchantId: string;
   merchantName?: string;
   name: string;
+  sku?: string;
   price: number;
+  costPrice?: number;
   unit: string;
   stock: number;
+  lowStockThreshold?: number;
   imageUrl?: string;
   description?: string;
   isActive: boolean;
@@ -97,6 +148,7 @@ export interface Order {
   deliveryAddress?: string;
   riderId?: string;
   riderName?: string;
+  paymentMethod?: PaymentMethod;
   createdAt: string;
   updatedAt: string;
 }
@@ -135,6 +187,8 @@ export interface SystemStats {
   totalMerchants: number;
   activeRiders: number;
   pendingApprovals: number;
+  pendingPaymentsCount: number;
+  totalUsers: number;
   todayOrders: number;
   monthlyGrowth: number;
 }

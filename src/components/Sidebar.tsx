@@ -1,12 +1,14 @@
 import React from 'react';
 import {
   LayoutDashboard,
+  Users,
+  CreditCard,
   Store,
   Bike,
   Package,
   ShoppingCart,
   FileText,
-  Users,
+  UserCheck,
   Settings,
   ShieldCheck,
   ExternalLink,
@@ -14,6 +16,8 @@ import {
 
 export type TabType =
   | 'dashboard'
+  | 'users'
+  | 'payments'
   | 'merchants'
   | 'riders'
   | 'products'
@@ -26,17 +30,36 @@ interface SidebarProps {
   activeTab: TabType;
   setActiveTab: (tab: TabType) => void;
   pendingCount?: number;
+  pendingPaymentsCount?: number;
 }
 
-export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, pendingCount = 0 }) => {
-  const navItems: Array<{ id: TabType; label: string; icon: any; badge?: string }> = [
+export const Sidebar: React.FC<SidebarProps> = ({
+  activeTab,
+  setActiveTab,
+  pendingCount = 0,
+  pendingPaymentsCount = 0,
+}) => {
+  const navItems: Array<{ id: TabType; label: string; icon: any; badge?: string; badgeColor?: string }> = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
-    { id: 'merchants', label: 'Shops & Merchants', icon: Store, badge: pendingCount > 0 ? `${pendingCount}` : undefined },
+    { id: 'users', label: 'User Accounts', icon: Users },
+    {
+      id: 'payments',
+      label: 'Payment Verification',
+      icon: CreditCard,
+      badge: pendingPaymentsCount > 0 ? `${pendingPaymentsCount}` : undefined,
+      badgeColor: '#10B981',
+    },
+    {
+      id: 'merchants',
+      label: 'Shops & Merchants',
+      icon: Store,
+      badge: pendingCount > 0 ? `${pendingCount}` : undefined,
+    },
     { id: 'riders', label: 'Delivery Riders', icon: Bike },
     { id: 'products', label: 'Global Products', icon: Package },
     { id: 'orders', label: 'Live Orders', icon: ShoppingCart },
     { id: 'invoices', label: 'Invoices & Billing', icon: FileText },
-    { id: 'customers', label: 'Customers', icon: Users },
+    { id: 'customers', label: 'Customer Base', icon: UserCheck },
     { id: 'settings', label: 'System & Storage', icon: Settings },
   ];
 
@@ -61,7 +84,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, pendi
             alignItems: 'center',
             gap: 12,
             padding: '8px 12px',
-            marginBottom: 32,
+            marginBottom: 24,
           }}
         >
           <div
@@ -89,26 +112,26 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, pendi
         </div>
 
         {/* Navigation Section */}
-        <nav style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = activeTab === item.id;
             return (
               <button
                 key={item.id}
-                onClick={() => setActiveTab(item.id as TabType)}
+                onClick={() => setActiveTab(item.id)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'space-between',
                   width: '100%',
-                  padding: '11px 14px',
+                  padding: '10px 14px',
                   borderRadius: 12,
                   border: 'none',
                   background: isActive ? 'var(--color-primary)' : 'transparent',
                   color: isActive ? '#0F172A' : 'var(--text-secondary)',
                   fontWeight: isActive ? 700 : 500,
-                  fontSize: 14,
+                  fontSize: 13.5,
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                   textAlign: 'left',
@@ -127,13 +150,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ activeTab, setActiveTab, pendi
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <Icon size={19} color={isActive ? '#0F172A' : 'currentColor'} />
+                  <Icon size={18} color={isActive ? '#0F172A' : 'currentColor'} />
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
                   <span
                     style={{
-                      background: isActive ? '#0F172A' : 'var(--color-warning)',
+                      background: isActive ? '#0F172A' : item.badgeColor || 'var(--color-warning)',
                       color: isActive ? '#FFFFFF' : '#0F172A',
                       padding: '2px 7px',
                       borderRadius: 10,

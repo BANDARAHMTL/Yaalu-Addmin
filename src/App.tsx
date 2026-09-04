@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Sidebar, TabType } from './components/Sidebar';
 import { Header } from './components/Header';
 import { Dashboard } from './pages/Dashboard';
+import { Users } from './pages/Users';
+import { Payments } from './pages/Payments';
 import { Merchants } from './pages/Merchants';
 import { Riders } from './pages/Riders';
 import { Products } from './pages/Products';
@@ -10,7 +12,17 @@ import { Invoices } from './pages/Invoices';
 import { Customers } from './pages/Customers';
 import { Settings } from './pages/Settings';
 import { adminApi } from './services/api';
-import { Customer, Invoice, Merchant, Order, Product, Rider, SystemStats } from './types';
+import {
+  Customer,
+  Invoice,
+  Merchant,
+  Order,
+  PaymentTransaction,
+  Product,
+  Rider,
+  SystemStats,
+  UserAccount,
+} from './types';
 
 export function App() {
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
@@ -24,9 +36,13 @@ export function App() {
     totalMerchants: 0,
     activeRiders: 0,
     pendingApprovals: 0,
+    pendingPaymentsCount: 0,
+    totalUsers: 0,
     todayOrders: 0,
     monthlyGrowth: 0,
   });
+  const [users, setUsers] = useState<UserAccount[]>([]);
+  const [payments, setPayments] = useState<PaymentTransaction[]>([]);
   const [merchants, setMerchants] = useState<Merchant[]>([]);
   const [riders, setRiders] = useState<Rider[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
@@ -37,8 +53,10 @@ export function App() {
   const loadAllData = async () => {
     try {
       setIsRefreshing(true);
-      const [s, m, r, p, o, inv, c] = await Promise.all([
+      const [s, u, pay, m, r, p, o, inv, c] = await Promise.all([
         adminApi.getStats(),
+        adminApi.getUsers(),
+        adminApi.getPayments(),
         adminApi.getMerchants(),
         adminApi.getRiders(),
         adminApi.getProducts(),
@@ -47,6 +65,8 @@ export function App() {
         adminApi.getCustomers(),
       ]);
       setStats(s);
+      setUsers(u);
+      setPayments(pay);
       setMerchants(m);
       setRiders(r);
       setProducts(p);
@@ -62,7 +82,54 @@ export function App() {
     loadAllData();
   }, []);
 
-  // Handlers
+  // User CRUD Handlers
+  const handleCreateUser = async (data: Partial<UserAccount>) => {
+    const created = await adminApi.createUser(data);
+    setUsers((prev) => [created, ...prev]);
+    const updatedStats = await adminApi.getStats();
+    setStats(updatedStats);
+    return created;
+  };
+
+  const handleUpdateUser = async (id: string, data: Partial<UserAccount>) => {
+    const updated = await adminApi.updateUser(id, data);
+    setUsers((prev) => prev.map((u) => (u.id === id ? updated : u)));
+    const updatedStats = await adminApi.getStats();
+    setStats(updatedStats);
+    return updated;
+  };
+
+  const handleDeleteUser = async (id: string) => {
+    const ok = await adminApi.deleteUser(id);
+    if (ok) {
+      setUsers((prev) => prev.filter((u) => u.id !== id));
+      const updatedStats = await adminApi.getStats();
+      setStats(updatedStats);
+    }
+    return ok;
+  };
+
+  // Payment Verification Handlers
+  const handleVerifyPayment = async (
+    id: string,
+    status: 'VERIFIED' | 'REJECTED',
+    reason?: string
+  ) => {
+    const updated = await adminApi.verifyPayment(id, status, reason);
+    setPayments((prev) => prev.map((p) => (p.id === id ? updated : p)));
+    // Refresh stats & invoices
+    const [updatedStats, updatedInvoices, updatedOrders] = await Promise.all([
+      adminApi.getStats(),
+      adminApi.getInvoices(),
+      adminApi.getOrders(),
+    ]);
+    setStats(updatedStats);
+    setInvoices(updatedInvoices);
+    setOrders(updatedOrders);
+    return updated;
+  };
+
+  // Merchant Handlers
   const handleVerifyMerchant = async (id: string, isVerified: boolean) => {
     const updated = await adminApi.verifyMerchant(id, isVerified);
     setMerchants((prev) => prev.map((m) => (m.id === id ? updated : m)));
@@ -77,6 +144,7 @@ export function App() {
     setStats(updatedStats);
   };
 
+  // Rider Handlers
   const handleApproveRider = async (id: string, isApproved: boolean) => {
     const updated = await adminApi.approveRider(id, isApproved);
     setRiders((prev) => prev.map((r) => (r.id === id ? updated : r)));
@@ -89,6 +157,7 @@ export function App() {
     setRiders((prev) => prev.map((r) => (r.id === id ? updated : r)));
   };
 
+  // Product Handlers
   const handleCreateProduct = async (data: Partial<Product>) => {
     const created = await adminApi.createProduct(data);
     setProducts((prev) => [created, ...prev]);
@@ -107,12 +176,14 @@ export function App() {
     return ok;
   };
 
+  // Order Handlers
   const handleUpdateOrderStatus = async (id: string, status: Order['status']) => {
     const updated = await adminApi.updateOrderStatus(id, status);
     setOrders((prev) => prev.map((o) => (o.id === id ? updated : o)));
     return updated;
   };
 
+  // Invoice Handlers
   const handleMarkInvoicePaid = async (id: string) => {
     const updated = await adminApi.markInvoicePaid(id);
     setInvoices((prev) => prev.map((i) => (i.id === id ? updated : i)));
@@ -123,12 +194,16 @@ export function App() {
     switch (activeTab) {
       case 'dashboard':
         return { title: 'Executive Overview', subtitle: 'Platform analytics, live metrics and operations status' };
+      case 'users':
+        return { title: 'User Management & Roles', subtitle: 'Filter by user role, create accounts, update profiles and permissions' };
+      case 'payments':
+        return { title: 'Payment Verification', subtitle: 'Review bank deposit slips, verify online transactions, and approve payouts' };
       case 'merchants':
         return { title: 'Partner Shops & Outlets', subtitle: 'Merchant onboarding, verification, and BR credentials' };
       case 'riders':
         return { title: 'Delivery Fleet & Riders', subtitle: 'Rider approvals, license verification, and active status' };
       case 'products':
-        return { title: 'Global Product Catalog', subtitle: 'Inventory control, pricing, and Cloudinary asset management' };
+        return { title: 'Global Product Catalog', subtitle: 'Inventory control, SKU details, pricing, and Cloudinary asset management' };
       case 'orders':
         return { title: 'Customer Orders Stream', subtitle: 'Order processing, stage transitions, and deliveries' };
       case 'invoices':
@@ -149,6 +224,7 @@ export function App() {
         activeTab={activeTab}
         setActiveTab={setActiveTab}
         pendingCount={stats.pendingApprovals}
+        pendingPaymentsCount={stats.pendingPaymentsCount}
       />
 
       {/* Main Workspace */}
@@ -170,6 +246,24 @@ export function App() {
             riders={riders}
             products={products}
             onNavigate={setActiveTab}
+          />
+        )}
+
+        {activeTab === 'users' && (
+          <Users
+            users={users}
+            onCreateUser={handleCreateUser}
+            onUpdateUser={handleUpdateUser}
+            onDeleteUser={handleDeleteUser}
+            searchTerm={searchTerm}
+          />
+        )}
+
+        {activeTab === 'payments' && (
+          <Payments
+            payments={payments}
+            onVerifyPayment={handleVerifyPayment}
+            searchTerm={searchTerm}
           />
         )}
 

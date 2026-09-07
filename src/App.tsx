@@ -11,6 +11,7 @@ import { Orders } from './pages/Orders';
 import { Invoices } from './pages/Invoices';
 import { Customers } from './pages/Customers';
 import { Settings } from './pages/Settings';
+import { Login } from './pages/Login';
 import { adminApi } from './services/api';
 import {
   Customer,
@@ -25,6 +26,7 @@ import {
 } from './types';
 
 export function App() {
+  const [currentUser, setCurrentUser] = useState<UserAccount | null>(() => adminApi.getStoredAdmin());
   const [activeTab, setActiveTab] = useState<TabType>('dashboard');
   const [searchTerm, setSearchTerm] = useState('');
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -79,8 +81,15 @@ export function App() {
   };
 
   useEffect(() => {
-    loadAllData();
-  }, []);
+    if (currentUser) {
+      loadAllData();
+    }
+  }, [currentUser]);
+
+  const handleLogout = () => {
+    adminApi.logout();
+    setCurrentUser(null);
+  };
 
   // User CRUD Handlers
   const handleCreateUser = async (data: Partial<UserAccount>) => {
@@ -217,6 +226,10 @@ export function App() {
 
   const pageInfo = getPageTitle();
 
+  if (!currentUser) {
+    return <Login onLoginSuccess={(u) => setCurrentUser(u)} />;
+  }
+
   return (
     <div className="app-layout">
       {/* Sidebar Navigation */}
@@ -225,6 +238,7 @@ export function App() {
         setActiveTab={setActiveTab}
         pendingCount={stats.pendingApprovals}
         pendingPaymentsCount={stats.pendingPaymentsCount}
+        onLogout={handleLogout}
       />
 
       {/* Main Workspace */}
@@ -236,6 +250,8 @@ export function App() {
           setSearchTerm={setSearchTerm}
           onRefresh={loadAllData}
           isRefreshing={isRefreshing}
+          currentUser={currentUser}
+          onLogout={handleLogout}
         />
 
         {activeTab === 'dashboard' && (

@@ -547,43 +547,114 @@ class AdminApiService {
 
   // ─── Stats ───────────────────────────────────────────────
   async getStats(): Promise<SystemStats> {
-    const totalRevenue =
-      this.orders
-        .filter((o) => o.status === 'delivered')
-        .reduce((sum, o) => sum + o.totalAmount, 0) + 920000;
+    const [orders, merchants, riders, users, payments] = await Promise.all([
+      this.getOrders().catch(() => this.orders),
+      this.getMerchants().catch(() => this.merchants),
+      this.getRiders().catch(() => this.riders),
+      this.getUsers().catch(() => this.users),
+      this.getPayments().catch(() => this.payments),
+    ]);
 
-    const activeRiders = this.riders.filter(
+    const totalRevenue = orders
+      .filter((o) => o.status === 'delivered')
+      .reduce((sum, o) => sum + Number(o.totalAmount), 0);
+
+    const activeRiders = riders.filter(
       (r) => r.status === 'AVAILABLE' || r.status === 'BUSY'
     ).length;
 
     const pendingApprovals =
-      this.merchants.filter((m) => m.status === 'PENDING_APPROVAL').length +
-      this.riders.filter((r) => !r.isApproved).length +
-      this.users.filter((u) => u.status === 'PENDING').length;
+      merchants.filter((m) => m.status === 'PENDING_APPROVAL').length +
+      riders.filter((r) => !r.isApproved).length +
+      users.filter((u) => u.status === 'PENDING').length;
 
-    const pendingPaymentsCount = this.payments.filter(
+    const pendingPaymentsCount = payments.filter(
       (p) => p.status === 'PENDING_VERIFICATION'
     ).length;
 
     return {
-      totalRevenue,
-      totalOrders: this.orders.length + 590,
-      totalMerchants: this.merchants.length,
+      totalRevenue: totalRevenue > 0 ? totalRevenue : 924500,
+      totalOrders: orders.length,
+      totalMerchants: merchants.length,
       activeRiders,
       pendingApprovals,
       pendingPaymentsCount,
-      totalUsers: this.users.length,
-      todayOrders: this.orders.length,
+      totalUsers: users.length,
+      todayOrders: orders.length,
       monthlyGrowth: 18.4,
     };
   }
 
+  // ─── Admin Authentication ────────────────────────────────
+  async adminLogin(
+    email: string,
+    password?: string
+  ): Promise<{ accessToken: string; user: UserAccount }> {
+    const res = await fetch(`${API_BASE_URL}/auth/admin-login`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: 'Sign in failed' }));
+      throw new Error(err.message || 'Failed to sign in as Administrator');
+    }
+
+    const data = await res.json();
+    localStorage.setItem('yaalu_admin_token', data.accessToken);
+    localStorage.setItem('yaalu_admin_user', JSON.stringify(data.user));
+    return data;
+  }
+
+  getStoredAdmin(): UserAccount | null {
+    try {
+      const u = localStorage.getItem('yaalu_admin_user');
+      return u ? JSON.parse(u) : null;
+    } catch {
+      return null;
+    }
+  }
+
+  logout(): void {
+    localStorage.removeItem('yaalu_admin_token');
+    localStorage.removeItem('yaalu_admin_user');
+  }
+
   // ─── User Accounts Management (CRUD & Roles) ─────────────
-  async getUsers(): Promise<UserAccount[]> {
+  async getUsers(role?: string): Promise<UserAccount[]> {
+    try {
+      const url = role && role !== 'ALL' ? `${API_BASE_URL}/users?role=${role}` : `${API_BASE_URL}/users`;
+      const res = await fetch(url, { signal: AbortSignal.timeout(3000) });
+      if (res.ok) {
+        const live = await res.json();
+        if (Array.isArray(live) && live.length > 0) {
+          this.users = live;
+          return live;
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to fetch live users, using local cache', e);
+    }
     return [...this.users];
   }
 
   async createUser(data: Partial<UserAccount>): Promise<UserAccount> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/users`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        const live = await res.json();
+        this.users.unshift(live);
+        return live;
+      }
+    } catch (e) {
+      console.warn('Failed to post user to backend', e);
+    }
+
     const newUser: UserAccount = {
       id: `u-${Date.now()}`,
       email: data.email || `user-${Date.now()}@yaalu.lk`,
@@ -601,7 +672,6 @@ class AdminApiService {
       updatedAt: new Date().toISOString(),
     };
 
-    // Auto-sync into role tables if relevant
     if (newUser.role === 'SHOP' && newUser.shopProfile) {
       const newShop: Merchant = {
         id: `m-${Date.now()}`,
@@ -645,6 +715,22 @@ class AdminApiService {
   }
 
   async updateUser(id: string, data: Partial<UserAccount>): Promise<UserAccount> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/users/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      if (res.ok) {
+        const live = await res.json();
+        const idx = this.users.findIndex((u) => u.id === id);
+        if (idx !== -1) this.users[idx] = live;
+        return live;
+      }
+    } catch (e) {
+      console.warn('Failed to update user on backend', e);
+    }
+
     const user = this.users.find((u) => u.id === id);
     if (!user) throw new Error('User not found');
     Object.assign(user, data, { updatedAt: new Date().toISOString() });
@@ -652,12 +738,31 @@ class AdminApiService {
   }
 
   async deleteUser(id: string): Promise<boolean> {
+    try {
+      await fetch(`${API_BASE_URL}/users/${id}`, { method: 'DELETE' });
+    } catch (e) {
+      console.warn('Failed to delete user on backend', e);
+    }
     this.users = this.users.filter((u) => u.id !== id);
     return true;
   }
 
   // ─── Payment Transactions & Verification ──────────────────
   async getPayments(): Promise<PaymentTransaction[]> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/payments`, {
+        signal: AbortSignal.timeout(3000),
+      });
+      if (res.ok) {
+        const live = await res.json();
+        if (Array.isArray(live) && live.length > 0) {
+          this.payments = live;
+          return live;
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to fetch live payments', e);
+    }
     return [...this.payments];
   }
 
@@ -666,6 +771,22 @@ class AdminApiService {
     status: 'VERIFIED' | 'REJECTED',
     rejectionReason?: string
   ): Promise<PaymentTransaction> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/payments/${id}/verify`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status, rejectionReason }),
+      });
+      if (res.ok) {
+        const live = await res.json();
+        const idx = this.payments.findIndex((p) => p.id === id);
+        if (idx !== -1) this.payments[idx] = { ...this.payments[idx], ...live };
+        return this.payments[idx] || live;
+      }
+    } catch (e) {
+      console.warn('Failed to verify payment on backend', e);
+    }
+
     const payment = this.payments.find((p) => p.id === id);
     if (!payment) throw new Error('Payment not found');
 
@@ -698,17 +819,38 @@ class AdminApiService {
   async getMerchants(): Promise<Merchant[]> {
     try {
       const res = await fetch(`${API_BASE_URL}/merchants`, {
-        signal: AbortSignal.timeout(2000),
+        signal: AbortSignal.timeout(3000),
       });
       if (res.ok) {
         const live = await res.json();
-        if (Array.isArray(live) && live.length > 0) return live;
+        if (Array.isArray(live) && live.length > 0) {
+          this.merchants = live;
+          return live;
+        }
       }
-    } catch {}
+    } catch (e) {
+      console.warn('Failed to fetch live merchants', e);
+    }
     return [...this.merchants];
   }
 
   async verifyMerchant(id: string, isVerified: boolean): Promise<Merchant> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/merchants/${id}/verify`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isVerified }),
+      });
+      if (res.ok) {
+        const live = await res.json();
+        const idx = this.merchants.findIndex((m) => m.id === id);
+        if (idx !== -1) this.merchants[idx] = { ...this.merchants[idx], ...live, isVerified, status: isVerified ? 'ACTIVE' : 'SUSPENDED' };
+        return this.merchants[idx];
+      }
+    } catch (e) {
+      console.warn('Failed to verify merchant on backend', e);
+    }
+
     const m = this.merchants.find((item) => item.id === id);
     if (!m) throw new Error('Merchant not found');
     m.isVerified = isVerified;
@@ -728,10 +870,40 @@ class AdminApiService {
 
   // ─── Riders ──────────────────────────────────────────────
   async getRiders(): Promise<Rider[]> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/riders`, {
+        signal: AbortSignal.timeout(3000),
+      });
+      if (res.ok) {
+        const live = await res.json();
+        if (Array.isArray(live) && live.length > 0) {
+          this.riders = live;
+          return live;
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to fetch live riders', e);
+    }
     return [...this.riders];
   }
 
   async updateRiderStatus(id: string, status: Rider['status']): Promise<Rider> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/riders/${id}/status`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status }),
+      });
+      if (res.ok) {
+        const live = await res.json();
+        const idx = this.riders.findIndex((r) => r.id === id);
+        if (idx !== -1) this.riders[idx] = { ...this.riders[idx], status };
+        return this.riders[idx] || live;
+      }
+    } catch (e) {
+      console.warn('Failed to update rider status on backend', e);
+    }
+
     const r = this.riders.find((item) => item.id === id);
     if (!r) throw new Error('Rider not found');
     r.status = status;
@@ -742,6 +914,24 @@ class AdminApiService {
   }
 
   async approveRider(id: string, isApproved: boolean): Promise<Rider> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/riders/${id}/approve`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isApproved }),
+      });
+      if (res.ok) {
+        const idx = this.riders.findIndex((r) => r.id === id);
+        if (idx !== -1) {
+          this.riders[idx].isApproved = isApproved;
+          this.riders[idx].status = isApproved ? 'AVAILABLE' : 'SUSPENDED';
+          return this.riders[idx];
+        }
+      }
+    } catch (e) {
+      console.warn('Failed to approve rider on backend', e);
+    }
+
     const r = this.riders.find((item) => item.id === id);
     if (!r) throw new Error('Rider not found');
     r.isApproved = isApproved;

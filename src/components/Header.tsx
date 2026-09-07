@@ -1,5 +1,6 @@
 import React from 'react';
-import { Search, Bell, RefreshCw, UserCheck } from 'lucide-react';
+import { Search, Bell, RefreshCw, UserCheck, LogOut } from 'lucide-react';
+import { UserAccount } from '../types';
 
 interface HeaderProps {
   title: string;
@@ -8,6 +9,8 @@ interface HeaderProps {
   setSearchTerm: (term: string) => void;
   onRefresh?: () => void;
   isRefreshing?: boolean;
+  currentUser?: UserAccount | null;
+  onLogout?: () => void;
 }
 
 export const Header: React.FC<HeaderProps> = ({
@@ -17,6 +20,8 @@ export const Header: React.FC<HeaderProps> = ({
   setSearchTerm,
   onRefresh,
   isRefreshing = false,
+  currentUser,
+  onLogout,
 }) => {
   return (
     <header
@@ -95,40 +100,78 @@ export const Header: React.FC<HeaderProps> = ({
           />
         </button>
 
-        {/* Super Admin Profile Chip */}
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 10,
-            padding: '6px 12px',
-            backgroundColor: 'rgba(255, 255, 255, 0.04)',
-            border: '1px solid var(--border-dark)',
-            borderRadius: 12,
-          }}
-        >
+        {/* Super Admin Profile Chip & Sign Out */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
           <div
             style={{
-              width: 32,
-              height: 32,
-              borderRadius: '50%',
-              backgroundColor: 'var(--color-primary-light)',
-              border: '1px solid rgba(245, 199, 72, 0.4)',
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
+              gap: 10,
+              padding: '6px 14px',
+              backgroundColor: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid var(--border-dark)',
+              borderRadius: 12,
             }}
           >
-            <UserCheck size={16} color="var(--color-primary)" />
-          </div>
-          <div>
-            <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
-              Administrator
+            {currentUser?.avatarUrl ? (
+              <img
+                src={currentUser.avatarUrl}
+                alt="Admin Avatar"
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  objectFit: 'cover',
+                  border: '1px solid rgba(245, 199, 72, 0.5)',
+                }}
+              />
+            ) : (
+              <div
+                style={{
+                  width: 32,
+                  height: 32,
+                  borderRadius: '50%',
+                  backgroundColor: 'var(--color-primary-light)',
+                  border: '1px solid rgba(245, 199, 72, 0.4)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <UserCheck size={16} color="var(--color-primary)" />
+              </div>
+            )}
+            <div>
+              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+                {currentUser?.fullName || 'Super Admin'}
+              </div>
+              <div style={{ fontSize: 11, color: 'var(--color-success)', fontWeight: 600 }}>
+                {currentUser?.email || 'admin@yaalu.lk'}
+              </div>
             </div>
-            <div style={{ fontSize: 11, color: 'var(--color-success)', fontWeight: 600 }}>
-              Super Access
-            </div>
           </div>
+
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="btn btn-secondary"
+              title="Sign Out of Admin Console"
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 6,
+                padding: '8px 12px',
+                fontSize: 12.5,
+                fontWeight: 600,
+                color: '#F87171',
+                borderColor: 'rgba(239, 68, 68, 0.3)',
+                backgroundColor: 'rgba(239, 68, 68, 0.05)',
+              }}
+            >
+              <LogOut size={15} />
+              <span>Sign Out</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

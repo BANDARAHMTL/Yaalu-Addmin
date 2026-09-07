@@ -12,6 +12,7 @@ import {
   Settings,
   ShieldCheck,
   ExternalLink,
+  LogOut,
 } from 'lucide-react';
 
 export type TabType =
@@ -31,6 +32,7 @@ interface SidebarProps {
   setActiveTab: (tab: TabType) => void;
   pendingCount?: number;
   pendingPaymentsCount?: number;
+  onLogout?: () => void;
 }
 
 export const Sidebar: React.FC<SidebarProps> = ({
@@ -38,6 +40,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
   setActiveTab,
   pendingCount = 0,
   pendingPaymentsCount = 0,
+  onLogout,
 }) => {
   const navItems: Array<{ id: TabType; label: string; icon: any; badge?: string; badgeColor?: string }> = [
     { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -191,22 +194,47 @@ export const Sidebar: React.FC<SidebarProps> = ({
         <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
           Connected to port 3001
         </div>
-        <a
-          href="http://localhost:3001"
-          target="_blank"
-          rel="noreferrer"
-          className="flex items-center gap-2"
-          style={{
-            marginTop: 10,
-            fontSize: 11.5,
-            color: 'var(--color-primary)',
-            textDecoration: 'none',
-            fontWeight: 600,
-          }}
-        >
-          <span>Open API Gateway</span>
-          <ExternalLink size={12} />
-        </a>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
+          <a
+            href="http://localhost:3001"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center gap-1.5"
+            style={{
+              fontSize: 11.5,
+              color: 'var(--color-primary)',
+              textDecoration: 'none',
+              fontWeight: 600,
+            }}
+          >
+            <span>API Docs</span>
+            <ExternalLink size={12} />
+          </a>
+
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              style={{
+                background: 'transparent',
+                border: 'none',
+                color: '#F87171',
+                fontSize: 11.5,
+                fontWeight: 600,
+                cursor: 'pointer',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 4,
+                padding: '2px 6px',
+                borderRadius: 6,
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+            >
+              <LogOut size={12} />
+              <span>Sign Out</span>
+            </button>
+          )}
+        </div>
       </div>
     </aside>
   );

@@ -114,6 +114,8 @@ export const Users: React.FC<UsersProps> = ({
 
       await onCreateUser(payload);
       setIsCreateOpen(false);
+    } catch (err: any) {
+      alert(`❌ Create failed: ${err?.message || 'Backend server not running. Please start the backend first.'}`);
     } finally {
       setIsSubmitting(false);
     }
@@ -143,6 +145,8 @@ export const Users: React.FC<UsersProps> = ({
 
       await onUpdateUser(editingUser.id, payload);
       setEditingUser(null);
+    } catch (err: any) {
+      alert(`❌ Update failed: ${err?.message || 'Backend server not running. Please start the backend first.'}`);
     } finally {
       setIsSubmitting(false);
     }

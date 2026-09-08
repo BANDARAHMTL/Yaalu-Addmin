@@ -19,7 +19,7 @@ class AdminApiService {
     email: string,
     password?: string
   ): Promise<{ accessToken: string; user: UserAccount }> {
-    const res = await fetch(`${API_BASE_URL}/admin/login`, {
+    const res = await fetch(`${API_BASE_URL}/auth/admin-login`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password }),
@@ -192,6 +192,39 @@ class AdminApiService {
     return this.verifyMerchant(id, status === 'ACTIVE');
   }
 
+  async updateMerchantBankDetails(
+    id: string,
+    data: {
+      bankName?: string;
+      accountName?: string;
+      accountNo?: string;
+      accountBranch?: string;
+      cardLast4?: string;
+      cardType?: string;
+    }
+  ): Promise<Merchant> {
+    const res = await fetch(`${API_BASE_URL}/admin/merchants/${id}/bank`, {
+      method: 'PATCH',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to update merchant bank details');
+    return await res.json();
+  }
+
+  async updateMerchant(
+    id: string,
+    data: Partial<Merchant>
+  ): Promise<Merchant> {
+    const res = await fetch(`${API_BASE_URL}/admin/merchants/${id}`, {
+      method: 'PATCH',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to update merchant profile');
+    return await res.json();
+  }
+
   // ─── Riders ──────────────────────────────────────────────
   async getRiders(): Promise<Rider[]> {
     try {
@@ -229,6 +262,24 @@ class AdminApiService {
     return await res.json();
   }
 
+  async updateRiderBankDetails(
+    id: string,
+    data: {
+      bankName?: string;
+      accountName?: string;
+      accountNo?: string;
+      accountBranch?: string;
+    }
+  ): Promise<Rider> {
+    const res = await fetch(`${API_BASE_URL}/admin/riders/${id}/bank`, {
+      method: 'PATCH',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to update rider bank details');
+    return await res.json();
+  }
+
   // ─── Products ────────────────────────────────────────────
   async getProducts(): Promise<Product[]> {
     try {
@@ -247,28 +298,43 @@ class AdminApiService {
   }
 
   async createProduct(data: Partial<Product>): Promise<Product> {
-    const res = await fetch(`${API_BASE_URL}/products`, {
+    const res = await fetch(`${API_BASE_URL}/admin/products`, {
       method: 'POST',
       headers: this.getAuthHeaders(),
       body: JSON.stringify(data),
     });
-    if (!res.ok) throw new Error('Failed to create product');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: 'Failed to create product' }));
+      throw new Error(err.message || 'Failed to create product');
+    }
     return await res.json();
   }
 
   async updateProduct(id: string, data: Partial<Product>): Promise<Product> {
-    const res = await fetch(`${API_BASE_URL}/products/${id}`, {
+    const payload: Record<string, any> = {};
+    if (data.name !== undefined) payload.name = data.name;
+    if (data.price !== undefined) payload.price = parseFloat(data.price as any) || 0;
+    if (data.unit !== undefined) payload.unit = data.unit;
+    if (data.stock !== undefined) payload.stock = parseInt(data.stock as any) || 0;
+    if (data.imageUrl !== undefined) payload.imageUrl = data.imageUrl;
+    if (data.description !== undefined) payload.description = data.description;
+    if (data.isActive !== undefined) payload.isActive = data.isActive;
+
+    const res = await fetch(`${API_BASE_URL}/admin/products/${id}`, {
       method: 'PATCH',
       headers: this.getAuthHeaders(),
-      body: JSON.stringify(data),
+      body: JSON.stringify(payload),
     });
-    if (!res.ok) throw new Error('Failed to update product');
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: 'Failed to update product' }));
+      throw new Error(err.message || 'Failed to update product');
+    }
     return await res.json();
   }
 
   async deleteProduct(id: string): Promise<boolean> {
     try {
-      const res = await fetch(`${API_BASE_URL}/products/${id}`, {
+      const res = await fetch(`${API_BASE_URL}/admin/products/${id}`, {
         method: 'DELETE',
         headers: this.getAuthHeaders(),
       });
@@ -346,6 +412,30 @@ class AdminApiService {
       console.warn('Failed to fetch customers from backend', e);
     }
     return [];
+  }
+
+  async updateCustomer(
+    id: string,
+    data: Partial<Customer>
+  ): Promise<Customer> {
+    const res = await fetch(`${API_BASE_URL}/admin/customers/${id}`, {
+      method: 'PATCH',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to update customer details');
+    return await res.json();
+  }
+
+  async updateCustomerCardDetails(
+    id: string,
+    data: {
+      cardLast4?: string;
+      cardType?: string;
+      billingAddress?: string;
+    }
+  ): Promise<Customer> {
+    return this.updateCustomer(id, data);
   }
 }
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { DollarSign, ShoppingCart, Store, Bike, AlertCircle, ArrowUpRight, CheckCircle2, Clock } from 'lucide-react';
+import { Users, ShoppingCart, Store, Bike, AlertCircle, ArrowUpRight, CheckCircle2, Clock } from 'lucide-react';
 import { StatCard } from '../components/StatCard';
 import { StatusBadge } from '../components/StatusBadge';
 import { Merchant, Order, Product, Rider, SystemStats } from '../types';
@@ -26,12 +26,12 @@ export const Dashboard: React.FC<DashboardProps> = ({
 
   return (
     <div className="page-container" style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
-      {/* Pending Approvals Alert Banner if any */}
+      {/* Verification Alert Banner */}
       {stats.pendingApprovals > 0 && (
         <div
           style={{
-            background: 'linear-gradient(90deg, rgba(245, 158, 11, 0.15) 0%, rgba(17, 24, 39, 0.8) 100%)',
-            border: '1px solid rgba(245, 158, 11, 0.3)',
+            background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%)',
+            border: '1px solid rgba(239, 68, 68, 0.3)',
             borderRadius: 14,
             padding: '16px 20px',
             display: 'flex',
@@ -40,7 +40,20 @@ export const Dashboard: React.FC<DashboardProps> = ({
           }}
         >
           <div className="flex items-center gap-3">
-            <AlertCircle color="#F59E0B" size={24} />
+            <div
+              style={{
+                width: 36,
+                height: 36,
+                borderRadius: '50%',
+                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: '#EF4444',
+              }}
+            >
+              <AlertCircle size={20} />
+            </div>
             <div>
               <div style={{ fontWeight: 700, color: '#F8FAFC', fontSize: 14.5 }}>
                 {stats.pendingApprovals} Verification Request{stats.pendingApprovals > 1 ? 's' : ''} Pending Review
@@ -62,11 +75,11 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {/* KPI Cards Grid */}
       <div className="grid grid-cols-4 gap-4">
         <StatCard
-          title="Total Gross Revenue"
-          value={`LKR ${(stats.totalRevenue).toLocaleString()}`}
-          change="18.4%"
+          title="Total Registered Users"
+          value={stats.totalUsers}
+          change="All Roles"
           isPositive={true}
-          icon={DollarSign}
+          icon={Users}
           iconBg="rgba(16, 185, 129, 0.15)"
           iconColor="#10B981"
         />

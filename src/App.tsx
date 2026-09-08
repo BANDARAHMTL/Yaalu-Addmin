@@ -166,6 +166,32 @@ export function App() {
     setRiders((prev) => prev.map((r) => (r.id === id ? updated : r)));
   };
 
+  const handleUpdateMerchant = async (id: string, data: Partial<Merchant>) => {
+    const updated = await adminApi.updateMerchant(id, data);
+    setMerchants((prev) => prev.map((m) => (m.id === id ? { ...m, ...updated } : m)));
+    return updated;
+  };
+
+  const handleUpdateMerchantBankDetails = async (id: string, data: any) => {
+    const updated = await adminApi.updateMerchantBankDetails(id, data);
+    setMerchants((prev) => prev.map((m) => (m.id === id ? { ...m, ...updated } : m)));
+  };
+
+  const handleUpdateRiderBankDetails = async (id: string, data: any) => {
+    const updated = await adminApi.updateRiderBankDetails(id, data);
+    setRiders((prev) => prev.map((r) => (r.id === id ? { ...r, ...updated } : r)));
+  };
+
+  const handleUpdateCustomer = async (id: string, data: Partial<Customer>) => {
+    const updated = await adminApi.updateCustomer(id, data);
+    setCustomers((prev) => prev.map((c) => (c.id === id ? { ...c, ...updated } : c)));
+  };
+
+  const handleUpdateCustomerCardDetails = async (id: string, data: any) => {
+    const updated = await adminApi.updateCustomerCardDetails(id, data);
+    setCustomers((prev) => prev.map((c) => (c.id === id ? { ...c, ...updated } : c)));
+  };
+
   // Product Handlers
   const handleCreateProduct = async (data: Partial<Product>) => {
     const created = await adminApi.createProduct(data);
@@ -288,6 +314,8 @@ export function App() {
             merchants={merchants}
             onVerify={handleVerifyMerchant}
             onUpdateStatus={handleUpdateMerchantStatus}
+            onUpdateMerchant={handleUpdateMerchant}
+            onUpdateBankDetails={handleUpdateMerchantBankDetails}
             searchTerm={searchTerm}
           />
         )}
@@ -297,6 +325,7 @@ export function App() {
             riders={riders}
             onApprove={handleApproveRider}
             onUpdateStatus={handleUpdateRiderStatus}
+            onUpdateBankDetails={handleUpdateRiderBankDetails}
             searchTerm={searchTerm}
           />
         )}
@@ -331,6 +360,8 @@ export function App() {
         {activeTab === 'customers' && (
           <Customers
             customers={customers}
+            onUpdateCustomer={handleUpdateCustomer}
+            onUpdateCardDetails={handleUpdateCustomerCardDetails}
             searchTerm={searchTerm}
           />
         )}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Bike, CheckCircle2, Phone, Star, ShieldCheck, Car, Truck } from 'lucide-react';
+import { Bike, CheckCircle2, Phone, Star, ShieldCheck, Car, Truck, Landmark, Save, Edit3 } from 'lucide-react';
 import { StatusBadge } from '../components/StatusBadge';
 import { Modal } from '../components/Modal';
 import { Rider } from '../types';
@@ -8,6 +8,7 @@ interface RidersProps {
   riders: Rider[];
   onApprove: (id: string, isApproved: boolean) => Promise<void>;
   onUpdateStatus: (id: string, status: Rider['status']) => Promise<void>;
+  onUpdateBankDetails: (id: string, data: any) => Promise<void>;
   searchTerm: string;
 }
 
@@ -15,11 +16,17 @@ export const Riders: React.FC<RidersProps> = ({
   riders,
   onApprove,
   onUpdateStatus,
+  onUpdateBankDetails,
   searchTerm,
 }) => {
   const [selectedRider, setSelectedRider] = useState<Rider | null>(null);
   const [filter, setFilter] = useState<'ALL' | 'AVAILABLE' | 'BUSY' | 'PENDING' | 'OFFLINE'>('ALL');
   const [loading, setLoading] = useState(false);
+  const [editingBank, setEditingBank] = useState(false);
+  const [bankSaving, setBankSaving] = useState(false);
+  const [bankForm, setBankForm] = useState({
+    bankName: '', accountName: '', accountNo: '', accountBranch: '',
+  });
 
   const filteredRiders = riders.filter((r) => {
     const matchesFilter =
@@ -51,6 +58,28 @@ export const Riders: React.FC<RidersProps> = ({
       }
     } finally {
       setLoading(false);
+    }
+  };
+
+  const openBankEdit = (r: Rider) => {
+    setBankForm({
+      bankName: r.bankName || '',
+      accountName: r.accountName || '',
+      accountNo: r.accountNo || '',
+      accountBranch: r.accountBranch || '',
+    });
+    setEditingBank(true);
+  };
+
+  const handleSaveBank = async () => {
+    if (!selectedRider) return;
+    try {
+      setBankSaving(true);
+      await onUpdateBankDetails(selectedRider.id, bankForm);
+      setSelectedRider({ ...selectedRider, ...bankForm });
+      setEditingBank(false);
+    } finally {
+      setBankSaving(false);
     }
   };
 
@@ -235,6 +264,62 @@ export const Riders: React.FC<RidersProps> = ({
               </div>
             </div>
 
+            <div className="card" style={{ padding: 16 }}>
+              <div className="flex items-center justify-between" style={{ marginBottom: 12 }}>
+                <div className="flex items-center gap-2" style={{ fontWeight: 700, fontSize: 13 }}>
+                  <Landmark size={16} color="var(--color-primary)" /> Payout Bank Account
+                </div>
+                <button
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => editingBank ? setEditingBank(false) : openBankEdit(selectedRider)}
+                  style={{ display: 'flex', alignItems: 'center', gap: 5 }}
+                >
+                  <Edit3 size={13} /> {editingBank ? 'Cancel' : 'Edit'}
+                </button>
+              </div>
+              {editingBank ? (
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  <div className="grid grid-cols-2 gap-3">
+                    {([
+                      { label: 'Bank Name', key: 'bankName', placeholder: 'e.g. BOC' },
+                      { label: 'Account Name', key: 'accountName', placeholder: 'Full name on account' },
+                      { label: 'Account Number', key: 'accountNo', placeholder: 'e.g. 0012345678' },
+                      { label: 'Branch', key: 'accountBranch', placeholder: 'e.g. Kandy' },
+                    ] as const).map(({ label, key, placeholder }) => (
+                      <div key={key}>
+                        <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>{label}</div>
+                        <input
+                          style={{ width: '100%', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', borderRadius: 8, padding: '6px 10px', color: 'var(--text-primary)', fontSize: 13 }}
+                          value={bankForm[key]}
+                          onChange={e => setBankForm(f => ({ ...f, [key]: e.target.value }))}
+                          placeholder={placeholder}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                  <button
+                    className="btn btn-primary btn-sm"
+                    onClick={handleSaveBank}
+                    disabled={bankSaving}
+                    style={{ alignSelf: 'flex-end', display: 'flex', alignItems: 'center', gap: 6 }}
+                  >
+                    <Save size={14} /> {bankSaving ? 'Saving...' : 'Save Bank Details'}
+                  </button>
+                </div>
+              ) : (
+                <div className="grid grid-cols-2 gap-3" style={{ fontSize: 13 }}>
+                  {[['Bank', selectedRider.bankName], ['Account Name', selectedRider.accountName],
+                    ['Account No', selectedRider.accountNo], ['Branch', selectedRider.accountBranch]].map(([label, val]) => (
+                    <div key={label as string}>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>{label}</div>
+                      <div style={{ fontWeight: 600, color: val ? 'var(--text-primary)' : 'var(--text-muted)', fontSize: val ? 13 : 12 }}>
+                        {val || 'Not set'}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
             <div className="card" style={{ padding: 16 }}>
               <div style={{ fontSize: 13, fontWeight: 600, marginBottom: 12 }}>
                 Update Operational Status:

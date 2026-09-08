@@ -73,9 +73,14 @@ export interface Merchant {
   shopAddress?: string;
   outletAddress?: string;
   registrationNo?: string;
+  // Bank & Payout Details
   bankName?: string;
   accountName?: string;
   accountNo?: string;
+  accountBranch?: string;
+  // Card Payment Details
+  cardLast4?: string;
+  cardType?: string;
   logoUrl?: string;
   bannerUrl?: string;
   isVerified?: boolean;
@@ -102,6 +107,11 @@ export interface Rider {
   currentLongitude?: number;
   deliveriesCompleted?: number;
   rating?: number;
+  // Bank Payout Details
+  bankName?: string;
+  accountName?: string;
+  accountNo?: string;
+  accountBranch?: string;
   createdAt: string;
 }
 
@@ -156,13 +166,19 @@ export interface Order {
 export interface Customer {
   id: string;
   merchantId?: string;
+  userId?: string;
   name: string;
   mobile?: string;
   email?: string;
   address?: string;
+  city?: string;
   notes?: string;
   totalOrders?: number;
   totalSpent?: number;
+  // Card Payment Details
+  cardLast4?: string;
+  cardType?: string;
+  billingAddress?: string;
   createdAt: string;
 }
 

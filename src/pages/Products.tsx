@@ -92,7 +92,7 @@ export const Products: React.FC<ProductsProps> = ({
 
     try {
       setUploadingImage(true);
-      const url = await uploadToCloudinary(file, 'yaalu_products');
+      const url = await uploadToCloudinary(file, 'yaalu/products');
       setImageUrl(url);
     } catch (err: any) {
       alert(`Cloudinary upload failed: ${err?.message || 'Error'}`);
@@ -131,6 +131,8 @@ export const Products: React.FC<ProductsProps> = ({
         await onCreateProduct(payload);
       }
       setIsModalOpen(false);
+    } catch (err: any) {
+      alert(`❌ Save failed: ${err?.message || 'Backend server not running. Please start the backend first.'}`);
     } finally {
       setIsSaving(false);
     }
@@ -138,9 +140,13 @@ export const Products: React.FC<ProductsProps> = ({
 
   const handleQuickStockUpdate = async (product: Product, newStock: number) => {
     if (newStock < 0) return;
-    const updated = await onUpdateProduct(product.id, { stock: newStock });
-    if (inspectingProduct?.id === product.id) {
-      setInspectingProduct(updated);
+    try {
+      const updated = await onUpdateProduct(product.id, { stock: newStock });
+      if (inspectingProduct?.id === product.id) {
+        setInspectingProduct(updated);
+      }
+    } catch (err: any) {
+      alert(`❌ Stock update failed: ${err?.message || 'Backend not reachable.'}`);
     }
   };
 
@@ -469,70 +475,106 @@ export const Products: React.FC<ProductsProps> = ({
         maxWidth={620}
       >
         <form onSubmit={handleSave} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          {/* Cloudinary Image Picker */}
+          {/* Image Upload & URL Picker */}
           <div className="input-group">
-            <label className="input-label">Product Image (Cloudinary CDN)</label>
-            <div className="flex items-center gap-4">
+            <label className="input-label">Product Image</label>
+            <div className="flex items-start gap-4">
               {imageUrl ? (
-                <div style={{ position: 'relative' }}>
+                <div style={{ position: 'relative', flexShrink: 0 }}>
                   <img
                     src={imageUrl}
                     alt="Preview"
                     style={{
-                      width: 80,
-                      height: 80,
+                      width: 84,
+                      height: 84,
                       borderRadius: 12,
                       objectFit: 'cover',
                       border: '2px solid var(--color-primary)',
+                      background: 'rgba(255,255,255,0.05)',
                     }}
                   />
-                  <div
+                  <button
+                    type="button"
+                    onClick={() => setImageUrl('')}
                     style={{
                       position: 'absolute',
-                      top: 4,
-                      right: 4,
-                      background: 'var(--color-success)',
+                      top: -6,
+                      right: -6,
+                      background: '#EF4444',
+                      color: '#FFFFFF',
+                      border: 'none',
                       borderRadius: '50%',
-                      padding: 2,
+                      width: 20,
+                      height: 20,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      cursor: 'pointer',
+                      fontSize: 12,
+                      fontWeight: 700,
                     }}
+                    title="Remove Image"
                   >
-                    <Check size={12} color="#FFFFFF" />
-                  </div>
+                    ×
+                  </button>
                 </div>
               ) : (
                 <div
                   style={{
-                    width: 80,
-                    height: 80,
+                    width: 84,
+                    height: 84,
                     borderRadius: 12,
                     background: 'rgba(255,255,255,0.04)',
                     border: '1px dashed var(--border-dark)',
                     display: 'flex',
+                    flexDirection: 'column',
                     alignItems: 'center',
                     justifyContent: 'center',
+                    flexShrink: 0,
+                    gap: 4,
                   }}
                 >
-                  <ImageIcon size={28} color="var(--text-muted)" />
+                  <ImageIcon size={24} color="var(--text-muted)" />
+                  <span style={{ fontSize: 10, color: 'var(--text-muted)' }}>No image</span>
                 </div>
               )}
 
-              <div style={{ flex: 1 }}>
-                <label
-                  className="btn btn-secondary btn-sm"
-                  style={{ cursor: uploadingImage ? 'not-allowed' : 'pointer', display: 'inline-flex' }}
-                >
-                  <UploadCloud size={16} />
-                  {uploadingImage ? 'Uploading to Cloudinary...' : 'Upload Image to Cloudinary'}
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                <div className="flex items-center gap-2">
+                  <label
+                    className="btn btn-secondary btn-sm"
+                    style={{ cursor: uploadingImage ? 'not-allowed' : 'pointer', display: 'inline-flex', alignItems: 'center', gap: 6 }}
+                  >
+                    <UploadCloud size={15} />
+                    {uploadingImage ? 'Processing image...' : imageUrl ? 'Change Image File' : 'Upload Image File'}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      disabled={uploadingImage}
+                      style={{ display: 'none' }}
+                    />
+                  </label>
+                  {imageUrl && (
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => setImageUrl('')}
+                      style={{ color: '#EF4444' }}
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <div>
                   <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleImageUpload}
-                    disabled={uploadingImage}
-                    style={{ display: 'none' }}
+                    type="text"
+                    className="input-field"
+                    style={{ fontSize: 12, padding: '6px 10px' }}
+                    placeholder="Or paste image URL (https://...)"
+                    value={imageUrl}
+                    onChange={(e) => setImageUrl(e.target.value)}
                   />
-                </label>
-                <div style={{ fontSize: 11.5, color: 'var(--text-muted)', marginTop: 6 }}>
-                  Directly saved to Cloudinary cloud: <strong>yaalu</strong>
                 </div>
               </div>
             </div>

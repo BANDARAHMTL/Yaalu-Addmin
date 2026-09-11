@@ -33,9 +33,9 @@ export const Riders: React.FC<RidersProps> = ({
       filter === 'ALL' ||
       (filter === 'PENDING' ? !r.isApproved || r.status === 'PENDING' : r.status === filter);
     const matchesSearch =
-      r.fullName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      r.phone.includes(searchTerm) ||
-      r.vehicleNumber.toLowerCase().includes(searchTerm.toLowerCase());
+      (r.fullName || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (r.phone || '').includes(searchTerm) ||
+      (r.vehicleNumber || '').toLowerCase().includes(searchTerm.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
@@ -150,21 +150,35 @@ export const Riders: React.FC<RidersProps> = ({
                 <tr key={r.id}>
                   <td>
                     <div className="flex items-center gap-3">
-                      <div
-                        style={{
-                          width: 38,
-                          height: 38,
-                          borderRadius: '50%',
-                          backgroundColor: 'rgba(245, 199, 72, 0.15)',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          fontWeight: 700,
-                          color: 'var(--color-primary)',
-                        }}
-                      >
-                        {r.fullName.charAt(0)}
-                      </div>
+                      {r.profilePhotoUrl ? (
+                        <img
+                          src={r.profilePhotoUrl}
+                          alt={r.fullName}
+                          style={{
+                            width: 38,
+                            height: 38,
+                            borderRadius: '50%',
+                            objectFit: 'cover',
+                            border: '1.5px solid var(--color-primary)',
+                          }}
+                        />
+                      ) : (
+                        <div
+                          style={{
+                            width: 38,
+                            height: 38,
+                            borderRadius: '50%',
+                            backgroundColor: 'rgba(245, 199, 72, 0.15)',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            fontWeight: 700,
+                            color: 'var(--color-primary)',
+                          }}
+                        >
+                          {r.fullName ? r.fullName.charAt(0) : 'R'}
+                        </div>
+                      )}
                       <div>
                         <div style={{ fontWeight: 700, color: 'var(--text-primary)' }}>
                           {r.fullName}
@@ -177,14 +191,14 @@ export const Riders: React.FC<RidersProps> = ({
                   </td>
                   <td>
                     <div className="flex items-center gap-1" style={{ fontWeight: 600 }}>
-                      <Phone size={13} color="var(--text-muted)" /> {r.phone}
+                      <Phone size={13} color="var(--text-muted)" /> {r.phone || 'No phone'}
                     </div>
                   </td>
                   <td>
                     <div className="flex items-center gap-2">
                       {renderVehicleIcon(r.vehicleType)}
                       <div>
-                        <div style={{ fontWeight: 600, fontSize: 13 }}>{r.vehicleNumber}</div>
+                        <div style={{ fontWeight: 600, fontSize: 13 }}>{r.vehicleNumber || 'Pending Reg'}</div>
                         <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
                           {r.vehicleModel || r.vehicleType}
                         </div>
@@ -193,7 +207,7 @@ export const Riders: React.FC<RidersProps> = ({
                   </td>
                   <td>
                     <code style={{ fontSize: 12, background: 'rgba(255,255,255,0.06)', padding: '2px 6px', borderRadius: 4 }}>
-                      {r.licenseNumber}
+                      {r.licenseNumber || 'Pending'}
                     </code>
                   </td>
                   <td>
@@ -239,14 +253,61 @@ export const Riders: React.FC<RidersProps> = ({
           isOpen={!!selectedRider}
           onClose={() => setSelectedRider(null)}
           title={`Rider Verification: ${selectedRider.fullName}`}
-          maxWidth={550}
+          maxWidth={600}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            {/* Rider Header Card */}
+            <div className="card" style={{ padding: 14, display: 'flex', alignItems: 'center', gap: 14 }}>
+              {selectedRider.profilePhotoUrl ? (
+                <img
+                  src={selectedRider.profilePhotoUrl}
+                  alt={selectedRider.fullName}
+                  style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: '50%',
+                    objectFit: 'cover',
+                    border: '2px solid var(--color-primary)',
+                  }}
+                />
+              ) : (
+                <div
+                  style={{
+                    width: 60,
+                    height: 60,
+                    borderRadius: '50%',
+                    backgroundColor: 'rgba(245, 199, 72, 0.15)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontWeight: 700,
+                    fontSize: 22,
+                    color: 'var(--color-primary)',
+                  }}
+                >
+                  {selectedRider.fullName ? selectedRider.fullName.charAt(0) : 'R'}
+                </div>
+              )}
+              <div>
+                <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--text-primary)' }}>
+                  {selectedRider.fullName}
+                </div>
+                <div style={{ fontSize: 12.5, color: 'var(--text-secondary)', marginTop: 2 }}>
+                  📞 {selectedRider.phone} {selectedRider.nicNumber ? `| NIC: ${selectedRider.nicNumber}` : ''}
+                </div>
+                {selectedRider.city && (
+                  <div style={{ fontSize: 11.5, color: 'var(--text-muted)', marginTop: 2 }}>
+                    📍 {selectedRider.address ? `${selectedRider.address}, ` : ''}{selectedRider.city}
+                  </div>
+                )}
+              </div>
+            </div>
+
             <div className="grid grid-cols-2 gap-4">
               <div className="card" style={{ padding: 14 }}>
                 <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Vehicle Reg No</div>
                 <div style={{ fontSize: 16, fontWeight: 700, color: 'var(--color-primary)', marginTop: 2 }}>
-                  {selectedRider.vehicleNumber}
+                  {selectedRider.vehicleNumber || 'Not provided'}
                 </div>
                 <div style={{ fontSize: 12, color: 'var(--text-secondary)' }}>
                   {selectedRider.vehicleModel || selectedRider.vehicleType}
@@ -256,13 +317,48 @@ export const Riders: React.FC<RidersProps> = ({
               <div className="card" style={{ padding: 14 }}>
                 <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>Driving License</div>
                 <div style={{ fontSize: 16, fontWeight: 700, color: '#FFFFFF', marginTop: 2 }}>
-                  {selectedRider.licenseNumber}
+                  {selectedRider.licenseNumber || 'Not provided'}
                 </div>
-                <div style={{ fontSize: 12, color: 'var(--color-success)' }}>
-                  Verified National Document
+                <div style={{ fontSize: 12, color: selectedRider.licenseExpiry ? 'var(--color-success)' : 'var(--text-muted)' }}>
+                  {selectedRider.licenseExpiry ? `Expires: ${selectedRider.licenseExpiry}` : 'National Driving Document'}
                 </div>
               </div>
             </div>
+
+            {/* License Photos Preview */}
+            {(selectedRider.licenseFrontUrl || selectedRider.licenseBackUrl) && (
+              <div className="card" style={{ padding: 14 }}>
+                <div style={{ fontSize: 12, fontWeight: 700, marginBottom: 8, color: 'var(--text-primary)' }}>
+                  Uploaded License Documents:
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {selectedRider.licenseFrontUrl && (
+                    <div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>Front Photo</div>
+                      <a href={selectedRider.licenseFrontUrl} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={selectedRider.licenseFrontUrl}
+                          alt="License Front"
+                          style={{ width: '100%', height: 110, objectFit: 'cover', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)' }}
+                        />
+                      </a>
+                    </div>
+                  )}
+                  {selectedRider.licenseBackUrl && (
+                    <div>
+                      <div style={{ fontSize: 11, color: 'var(--text-muted)', marginBottom: 4 }}>Back Photo</div>
+                      <a href={selectedRider.licenseBackUrl} target="_blank" rel="noopener noreferrer">
+                        <img
+                          src={selectedRider.licenseBackUrl}
+                          alt="License Back"
+                          style={{ width: '100%', height: 110, objectFit: 'cover', borderRadius: 8, border: '1px solid rgba(255,255,255,0.1)' }}
+                        />
+                      </a>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
 
             <div className="card" style={{ padding: 16 }}>
               <div className="flex items-center justify-between" style={{ marginBottom: 12 }}>

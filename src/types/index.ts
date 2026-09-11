@@ -97,10 +97,17 @@ export interface Rider {
   fullName: string;
   phone: string;
   email?: string;
+  nicNumber?: string;
+  profilePhotoUrl?: string;
+  address?: string;
+  city?: string;
   vehicleType: 'MOTORBIKE' | 'SCOOTER' | 'THREE_WHEEL' | 'CAR' | 'VAN';
   vehicleNumber: string;
   vehicleModel?: string;
   licenseNumber: string;
+  licenseExpiry?: string;
+  licenseFrontUrl?: string;
+  licenseBackUrl?: string;
   status: RiderStatus;
   isApproved: boolean;
   currentLatitude?: number;
@@ -207,4 +214,75 @@ export interface SystemStats {
   totalUsers: number;
   todayOrders: number;
   monthlyGrowth: number;
+}
+
+export interface FareSetting {
+  id: string;
+  vehicleType: string;
+  vehicleName: string;
+  petrolPrice: number; // B: Price of 1L petrol
+  twoTOilRatio: number; // C: Amount of 2T oil per 1L petrol (L)
+  twoTOilPrice: number; // D: Price of 1L 2T oil
+  mileageKmPerLitre: number; // F: Distance per 1L petrol (km)
+  otherRunningCostPerKm: number; // G: Running costs per km (service, tyres, etc.)
+  fixedCostPerKm: number; // H: Fixed costs per km
+  profitMultiplier: number; // Multiplier (default 3x: J = 3I)
+  baseChargeFirstKm: number; // K: Base charge for 1st km
+  minimumFare: number;
+  commissionPercent?: number; // Platform commission % (e.g. 10%)
+  bidTimeoutMinutes?: number; // Bid countdown window in minutes (e.g. 2 mins)
+  bidTimeoutSeconds?: number;
+  isActive: boolean;
+  variables?: {
+    A_fuelMixtureCostPerLitre: number;
+    B_petrolPricePerLitre: number;
+    C_twoTOilRatioPerLitre: number;
+    D_twoTOilPricePerLitre: number;
+    E_fuelCostPerKm: number;
+    F_mileageKmPerLitre: number;
+    G_runningCostPerKm: number;
+    H_fixedCostPerKm: number;
+    I_driverOperatingCostPerKm: number;
+    J_customerRatePerKm: number;
+    K_baseChargeFirstKm: number;
+    M_distanceKm?: number;
+    L_totalTripFare?: number;
+    commissionPercent?: number;
+    commissionAmount?: number;
+    riderNetEarnings?: number;
+    bidTimeoutMinutes?: number;
+    bidTimeoutSeconds?: number;
+  };
+  formulaSummary?: {
+    step1: string;
+    step2: string;
+    step3: string;
+    step4: string;
+    step5: string;
+    commission?: string;
+    bidTimeout?: string;
+  };
+}
+
+export interface FareCalculationResult {
+  distanceKm: number;
+  vehicleType: string;
+  perKmRate: number;
+  baseCharge: number;
+  totalFare: number;
+  commissionPercent?: number;
+  commissionAmount?: number;
+  riderNetEarnings?: number;
+  bidTimeoutMinutes?: number;
+  bidTimeoutSeconds?: number;
+  breakdown: {
+    fuelMixtureCostPerLitre: number;
+    fuelCostPerKm: number;
+    operatingCostPerKm: number;
+    ratePerKm: number;
+    baseChargeFirstKm: number;
+    totalFare: number;
+    commissionAmount?: number;
+    riderNetEarnings?: number;
+  };
 }

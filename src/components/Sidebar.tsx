@@ -12,6 +12,9 @@ import {
   Settings,
   ShieldCheck,
   ExternalLink,
+  Calculator,
+  Percent,
+  Timer,
   LogOut,
 } from 'lucide-react';
 
@@ -21,6 +24,9 @@ export type TabType =
   | 'payments'
   | 'merchants'
   | 'riders'
+  | 'fare_engine'
+  | 'commission_mgmt'
+  | 'bid_mgmt'
   | 'products'
   | 'orders'
   | 'invoices'
@@ -59,6 +65,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
       badge: pendingCount > 0 ? `${pendingCount}` : undefined,
     },
     { id: 'riders', label: 'Delivery Riders', icon: Bike },
+    { id: 'fare_engine', label: 'Fare Pricing Engine', icon: Calculator },
+    { id: 'commission_mgmt', label: 'Commission Management', icon: Percent },
+    { id: 'bid_mgmt', label: 'Bid Management', icon: Timer },
     { id: 'products', label: 'Global Products', icon: Package },
     { id: 'orders', label: 'Live Orders', icon: ShoppingCart },
     { id: 'invoices', label: 'Invoices & Billing', icon: FileText },

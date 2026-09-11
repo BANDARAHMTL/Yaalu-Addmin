@@ -8,6 +8,8 @@ import {
   Rider,
   SystemStats,
   UserAccount,
+  FareSetting,
+  FareCalculationResult,
 } from '../types';
 
 const API_BASE_URL = 'http://localhost:3001';
@@ -436,6 +438,48 @@ class AdminApiService {
     }
   ): Promise<Customer> {
     return this.updateCustomer(id, data);
+  }
+
+  // ─── Fare Calculation & Pricing Engine ────────────────────
+  async getFareSettings(): Promise<FareSetting[]> {
+    try {
+      const res = await fetch(`${API_BASE_URL}/admin/fare-settings`, {
+        headers: this.getAuthHeaders(),
+        signal: AbortSignal.timeout(5000),
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) return data;
+      }
+    } catch (e) {
+      console.warn('Failed to fetch fare settings from backend', e);
+    }
+    return [];
+  }
+
+  async updateFareSettings(data: Partial<FareSetting>): Promise<FareSetting> {
+    const res = await fetch(`${API_BASE_URL}/admin/fare-settings`, {
+      method: 'PATCH',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ message: 'Failed to update fare settings' }));
+      throw new Error(err.message || 'Failed to update fare settings');
+    }
+    return await res.json();
+  }
+
+  async calculateTripFare(distanceKm: number, vehicleType = 'THREE_WHEEL'): Promise<FareSetting> {
+    const res = await fetch(`${API_BASE_URL}/admin/fare-settings/calculate`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify({ distanceKm, vehicleType }),
+    });
+    if (!res.ok) {
+      throw new Error('Failed to calculate fare');
+    }
+    return await res.json();
   }
 }
 

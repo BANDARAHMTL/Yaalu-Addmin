@@ -11,6 +11,9 @@ import { Orders } from './pages/Orders';
 import { Invoices } from './pages/Invoices';
 import { Customers } from './pages/Customers';
 import { Settings } from './pages/Settings';
+import { FareEngine } from './pages/FareEngine';
+import { CommissionManagement } from './pages/CommissionManagement';
+import { BidManagement } from './pages/BidManagement';
 import { Login } from './pages/Login';
 import { adminApi } from './services/api';
 import {
@@ -237,6 +240,12 @@ export function App() {
         return { title: 'Partner Shops & Outlets', subtitle: 'Merchant onboarding, verification, and BR credentials' };
       case 'riders':
         return { title: 'Delivery Fleet & Riders', subtitle: 'Rider approvals, license verification, and active status' };
+      case 'fare_engine':
+        return { title: 'Taxi & Fare Pricing Engine', subtitle: 'Dynamic formula pricing per 1 km and live trip cost calculator' };
+      case 'commission_mgmt':
+        return { title: 'Platform Commission Management', subtitle: 'Set and adjust platform commission fee percentages and revenue splits' };
+      case 'bid_mgmt':
+        return { title: 'Rider Bidding & Dispatch Management', subtitle: 'Configure bidding countdown timeout windows and dispatch rules' };
       case 'products':
         return { title: 'Global Product Catalog', subtitle: 'Inventory control, SKU details, pricing, and Cloudinary asset management' };
       case 'orders':
@@ -247,6 +256,8 @@ export function App() {
         return { title: 'Customer Base', subtitle: 'Shopper profiles, spend analytics, and communication' };
       case 'settings':
         return { title: 'System & Cloud Storage', subtitle: 'Cloudinary credentials, API diagnostics, and health' };
+      default:
+        return { title: 'Overview & Operations', subtitle: 'Platform control center' };
     }
   };
 
@@ -329,6 +340,12 @@ export function App() {
             searchTerm={searchTerm}
           />
         )}
+
+        {activeTab === 'fare_engine' && <FareEngine />}
+
+        {activeTab === 'commission_mgmt' && <CommissionManagement />}
+
+        {activeTab === 'bid_mgmt' && <BidManagement />}
 
         {activeTab === 'products' && (
           <Products

@@ -59,7 +59,7 @@ export const BidManagement: React.FC<BidManagementProps> = ({ onNotify }) => {
     }
   };
 
-  const handleTimeoutChange = (vehicleType: string, newMins: number) => {
+  const handleTimeoutChange = (vehicleType: string, newMins: any) => {
     setSettings((prev) =>
       prev.map((s) => (s.vehicleType === vehicleType ? { ...s, bidTimeoutMinutes: newMins } : s))
     );
@@ -70,7 +70,7 @@ export const BidManagement: React.FC<BidManagementProps> = ({ onNotify }) => {
       setSavingVehicle(setting.vehicleType);
       const updated = await adminApi.updateFareSettings({
         ...setting,
-        bidTimeoutMinutes: Number(setting.bidTimeoutMinutes) || 2.0,
+        bidTimeoutMinutes: parseFloat(String(setting.bidTimeoutMinutes)) > 0 ? parseFloat(String(setting.bidTimeoutMinutes)) : 2.0,
       });
       setSettings((prev) => prev.map((s) => (s.vehicleType === updated.vehicleType ? updated : s)));
       setSavedSuccess(setting.vehicleType);
@@ -268,13 +268,14 @@ export const BidManagement: React.FC<BidManagementProps> = ({ onNotify }) => {
                       <div style={{ position: 'relative' }}>
                         <input
                           type="number"
-                          step="0.5"
+                          step="any"
                           min="0.25"
                           max="30"
-                          value={setting.bidTimeoutMinutes ?? 2.0}
+                          value={setting.bidTimeoutMinutes !== undefined ? setting.bidTimeoutMinutes : ''}
                           onChange={(e) =>
-                            handleTimeoutChange(setting.vehicleType, parseFloat(e.target.value) || 1)
+                            handleTimeoutChange(setting.vehicleType, e.target.value)
                           }
+                          placeholder="2.0"
                           style={{
                             width: '100%',
                             background: 'rgba(255,255,255,0.06)',

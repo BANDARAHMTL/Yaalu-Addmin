@@ -95,7 +95,7 @@ const DEFAULT_PRESETS: Record<string, Partial<FareSetting>> = {
 export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
   const [activeVehicle, setActiveVehicle] = useState<'THREE_WHEEL' | 'MOTORBIKE' | 'CAR' | 'VAN'>('THREE_WHEEL');
   const [configs, setConfigs] = useState<Record<string, FareSetting>>({});
-  const [form, setForm] = useState<Partial<FareSetting>>(DEFAULT_PRESETS.THREE_WHEEL);
+  const [form, setForm] = useState<Record<string, any>>(DEFAULT_PRESETS.THREE_WHEEL);
   const [saving, setSaving] = useState(false);
   const [savedSuccess, setSavedSuccess] = useState(false);
   const [simDistance, setSimDistance] = useState<number>(5.0);
@@ -115,7 +115,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
         });
         setConfigs(map);
         if (map[activeVehicle]) {
-          setForm(map[activeVehicle]);
+          setForm({ ...map[activeVehicle] });
         }
       }
     } catch (err) {
@@ -126,14 +126,14 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
   const handleSelectVehicle = (vType: 'THREE_WHEEL' | 'MOTORBIKE' | 'CAR' | 'VAN') => {
     setActiveVehicle(vType);
     if (configs[vType]) {
-      setForm(configs[vType]);
+      setForm({ ...configs[vType] });
     } else {
-      setForm(DEFAULT_PRESETS[vType]);
+      setForm({ ...DEFAULT_PRESETS[vType] });
     }
     setSavedSuccess(false);
   };
 
-  const handleChange = (field: keyof FareSetting, val: any) => {
+  const handleChange = (field: string, val: any) => {
     setForm((prev) => ({
       ...prev,
       [field]: val,
@@ -142,16 +142,16 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
   };
 
   // ─── Mathematical Formula Calculation Engine ──────────────
-  const B = Number(form.petrolPrice) || 0; // Petrol price / L
-  const C = Number(form.twoTOilRatio) || 0; // 2T oil ratio / L
-  const D = Number(form.twoTOilPrice) || 0; // 2T oil price / L
-  const F = Number(form.mileageKmPerLitre) || 1; // Mileage km/L
-  const G = Number(form.otherRunningCostPerKm) || 0; // Running costs / km
-  const H = Number(form.fixedCostPerKm) || 0; // Fixed costs / km
-  const multiplier = Number(form.profitMultiplier) || 3.0; // Profit multiplier
-  const K = Number(form.baseChargeFirstKm) || 0; // 1st km base fare
-  const commissionPercent = Number(form.commissionPercent) >= 0 ? Number(form.commissionPercent) : 10.0;
-  const bidTimeoutMinutes = Number(form.bidTimeoutMinutes) > 0 ? Number(form.bidTimeoutMinutes) : 2.0;
+  const B = parseFloat(String(form.petrolPrice ?? '')) || 0; // Petrol price / L
+  const C = parseFloat(String(form.twoTOilRatio ?? '')) || 0; // 2T oil ratio / L
+  const D = parseFloat(String(form.twoTOilPrice ?? '')) || 0; // 2T oil price / L
+  const F = parseFloat(String(form.mileageKmPerLitre ?? '')) || 1; // Mileage km/L
+  const G = parseFloat(String(form.otherRunningCostPerKm ?? '')) || 0; // Running costs / km
+  const H = parseFloat(String(form.fixedCostPerKm ?? '')) || 0; // Fixed costs / km
+  const multiplier = parseFloat(String(form.profitMultiplier ?? '')) || 3.0; // Profit multiplier
+  const K = parseFloat(String(form.baseChargeFirstKm ?? '')) || 0; // 1st km base fare
+  const commissionPercent = parseFloat(String(form.commissionPercent ?? '')) >= 0 ? parseFloat(String(form.commissionPercent)) : 10.0;
+  const bidTimeoutMinutes = parseFloat(String(form.bidTimeoutMinutes ?? '')) > 0 ? parseFloat(String(form.bidTimeoutMinutes)) : 2.0;
 
   // Step 1: Cost of Fuel Mixture A = B + (C * D)
   const A = B + C * D;
@@ -171,7 +171,8 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
   if (M > 1.0) {
     L = K + J * (M - 1.0);
   }
-  L = Math.max(L, Number(form.minimumFare) || K);
+  const minFare = parseFloat(String(form.minimumFare ?? '')) || K;
+  L = Math.max(L, minFare);
 
   // Platform Commission & Rider Earning calculations
   const commissionAmount = (L * commissionPercent) / 100.0;
@@ -181,12 +182,26 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
   const handleSave = async () => {
     try {
       setSaving(true);
-      const updated = await adminApi.updateFareSettings({
+      const payload: Partial<FareSetting> = {
         ...form,
         vehicleType: activeVehicle,
-        vehicleName: form.vehicleName || DEFAULT_PRESETS[activeVehicle].vehicleName,
-      });
+        vehicleName: form.vehicleName || DEFAULT_PRESETS[activeVehicle]?.vehicleName || activeVehicle,
+        petrolPrice: parseFloat(String(form.petrolPrice ?? '')) || 370.0,
+        twoTOilRatio: parseFloat(String(form.twoTOilRatio ?? '')) >= 0 ? parseFloat(String(form.twoTOilRatio)) : 0.02,
+        twoTOilPrice: parseFloat(String(form.twoTOilPrice ?? '')) >= 0 ? parseFloat(String(form.twoTOilPrice)) : 1500.0,
+        mileageKmPerLitre: parseFloat(String(form.mileageKmPerLitre ?? '')) > 0 ? parseFloat(String(form.mileageKmPerLitre)) : 25.0,
+        otherRunningCostPerKm: parseFloat(String(form.otherRunningCostPerKm ?? '')) >= 0 ? parseFloat(String(form.otherRunningCostPerKm)) : 5.0,
+        fixedCostPerKm: parseFloat(String(form.fixedCostPerKm ?? '')) >= 0 ? parseFloat(String(form.fixedCostPerKm)) : 3.0,
+        profitMultiplier: parseFloat(String(form.profitMultiplier ?? '')) > 0 ? parseFloat(String(form.profitMultiplier)) : 3.0,
+        baseChargeFirstKm: parseFloat(String(form.baseChargeFirstKm ?? '')) >= 0 ? parseFloat(String(form.baseChargeFirstKm)) : 150.0,
+        minimumFare: parseFloat(String(form.minimumFare ?? '')) >= 0 ? parseFloat(String(form.minimumFare)) : (parseFloat(String(form.baseChargeFirstKm ?? '')) || 150.0),
+        commissionPercent: parseFloat(String(form.commissionPercent ?? '')) >= 0 ? parseFloat(String(form.commissionPercent)) : 10.0,
+        bidTimeoutMinutes: parseFloat(String(form.bidTimeoutMinutes ?? '')) > 0 ? parseFloat(String(form.bidTimeoutMinutes)) : 2.0,
+      };
+
+      const updated = await adminApi.updateFareSettings(payload);
       setConfigs((prev) => ({ ...prev, [activeVehicle]: updated }));
+      setForm({ ...updated });
       setSavedSuccess(true);
       if (onNotify) onNotify(`Fare formula for ${activeVehicle} saved successfully!`);
       setTimeout(() => setSavedSuccess(false), 3000);
@@ -417,9 +432,10 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="0.5"
-                    value={form.petrolPrice ?? 370}
-                    onChange={(e) => handleChange('petrolPrice', parseFloat(e.target.value) || 0)}
+                    step="any"
+                    value={form.petrolPrice !== undefined ? form.petrolPrice : ''}
+                    onChange={(e) => handleChange('petrolPrice', e.target.value)}
+                    placeholder="370"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
@@ -445,9 +461,10 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="0.5"
-                    value={form.mileageKmPerLitre ?? 25}
-                    onChange={(e) => handleChange('mileageKmPerLitre', parseFloat(e.target.value) || 1)}
+                    step="any"
+                    value={form.mileageKmPerLitre !== undefined ? form.mileageKmPerLitre : ''}
+                    onChange={(e) => handleChange('mileageKmPerLitre', e.target.value)}
+                    placeholder="25"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
@@ -473,9 +490,10 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="0.005"
-                    value={form.twoTOilRatio ?? 0.02}
-                    onChange={(e) => handleChange('twoTOilRatio', parseFloat(e.target.value) || 0)}
+                    step="any"
+                    value={form.twoTOilRatio !== undefined ? form.twoTOilRatio : ''}
+                    onChange={(e) => handleChange('twoTOilRatio', e.target.value)}
+                    placeholder="0.02"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
@@ -501,9 +519,10 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="10"
-                    value={form.twoTOilPrice ?? 1500}
-                    onChange={(e) => handleChange('twoTOilPrice', parseFloat(e.target.value) || 0)}
+                    step="any"
+                    value={form.twoTOilPrice !== undefined ? form.twoTOilPrice : ''}
+                    onChange={(e) => handleChange('twoTOilPrice', e.target.value)}
+                    placeholder="1500"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
@@ -538,9 +557,10 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="0.5"
-                    value={form.otherRunningCostPerKm ?? 5}
-                    onChange={(e) => handleChange('otherRunningCostPerKm', parseFloat(e.target.value) || 0)}
+                    step="any"
+                    value={form.otherRunningCostPerKm !== undefined ? form.otherRunningCostPerKm : ''}
+                    onChange={(e) => handleChange('otherRunningCostPerKm', e.target.value)}
+                    placeholder="5"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
@@ -566,9 +586,10 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="0.5"
-                    value={form.fixedCostPerKm ?? 3}
-                    onChange={(e) => handleChange('fixedCostPerKm', parseFloat(e.target.value) || 0)}
+                    step="any"
+                    value={form.fixedCostPerKm !== undefined ? form.fixedCostPerKm : ''}
+                    onChange={(e) => handleChange('fixedCostPerKm', e.target.value)}
+                    placeholder="3"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
@@ -603,9 +624,10 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="5"
-                    value={form.baseChargeFirstKm ?? 150}
-                    onChange={(e) => handleChange('baseChargeFirstKm', parseFloat(e.target.value) || 0)}
+                    step="any"
+                    value={form.baseChargeFirstKm !== undefined ? form.baseChargeFirstKm : ''}
+                    onChange={(e) => handleChange('baseChargeFirstKm', e.target.value)}
+                    placeholder="150"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
@@ -631,9 +653,10 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="0.1"
-                    value={form.profitMultiplier ?? 3.0}
-                    onChange={(e) => handleChange('profitMultiplier', parseFloat(e.target.value) || 3.0)}
+                    step="any"
+                    value={form.profitMultiplier !== undefined ? form.profitMultiplier : ''}
+                    onChange={(e) => handleChange('profitMultiplier', e.target.value)}
+                    placeholder="3.0"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
@@ -677,11 +700,12 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="0.5"
+                    step="any"
                     min="0"
                     max="100"
-                    value={form.commissionPercent ?? 10}
-                    onChange={(e) => handleChange('commissionPercent', parseFloat(e.target.value) || 0)}
+                    value={form.commissionPercent !== undefined ? form.commissionPercent : ''}
+                    onChange={(e) => handleChange('commissionPercent', e.target.value)}
+                    placeholder="10"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.08)',
@@ -710,11 +734,12 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 <div style={{ position: 'relative' }}>
                   <input
                     type="number"
-                    step="0.5"
+                    step="any"
                     min="0.25"
                     max="30"
-                    value={form.bidTimeoutMinutes ?? 2.0}
-                    onChange={(e) => handleChange('bidTimeoutMinutes', parseFloat(e.target.value) || 1)}
+                    value={form.bidTimeoutMinutes !== undefined ? form.bidTimeoutMinutes : ''}
+                    onChange={(e) => handleChange('bidTimeoutMinutes', e.target.value)}
+                    placeholder="2.0"
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.08)',

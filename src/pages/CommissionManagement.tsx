@@ -47,7 +47,7 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
     }
   };
 
-  const handleCommissionChange = (vehicleType: string, newPercent: number) => {
+  const handleCommissionChange = (vehicleType: string, newPercent: any) => {
     setSettings((prev) =>
       prev.map((s) => (s.vehicleType === vehicleType ? { ...s, commissionPercent: newPercent } : s))
     );
@@ -58,7 +58,7 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
       setSavingVehicle(setting.vehicleType);
       const updated = await adminApi.updateFareSettings({
         ...setting,
-        commissionPercent: Number(setting.commissionPercent) || 10,
+        commissionPercent: parseFloat(String(setting.commissionPercent)) >= 0 ? parseFloat(String(setting.commissionPercent)) : 10,
       });
       setSettings((prev) => prev.map((s) => (s.vehicleType === updated.vehicleType ? updated : s)));
       setSavedSuccess(setting.vehicleType);
@@ -249,13 +249,14 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
                       <div style={{ position: 'relative' }}>
                         <input
                           type="number"
-                          step="0.5"
+                          step="any"
                           min="0"
                           max="100"
-                          value={setting.commissionPercent ?? 10}
+                          value={setting.commissionPercent !== undefined ? setting.commissionPercent : ''}
                           onChange={(e) =>
-                            handleCommissionChange(setting.vehicleType, parseFloat(e.target.value) || 0)
+                            handleCommissionChange(setting.vehicleType, e.target.value)
                           }
+                          placeholder="10"
                           style={{
                             width: '100%',
                             background: 'rgba(255,255,255,0.06)',

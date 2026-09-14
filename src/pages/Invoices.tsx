@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DollarSign, CheckCircle2, Clock } from 'lucide-react';
 import { StatusBadge } from '../components/StatusBadge';
 import { formatShortId } from '../utils/formatId';
+import { Invoice } from '../types';
 
 interface InvoicesProps {
   invoices: Invoice[];

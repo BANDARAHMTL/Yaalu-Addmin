@@ -3,6 +3,7 @@ import { Eye, Clock, CheckCircle, PackageCheck, Truck, XCircle, MapPin, Phone, U
 import { StatusBadge } from '../components/StatusBadge';
 import { Modal } from '../components/Modal';
 import { formatOrderId } from '../utils/formatId';
+import { Order, OrderStatus } from '../types';
 
 interface OrdersProps {
   orders: Order[];

@@ -116,10 +116,10 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         <div style={{ textAlign: 'center', marginBottom: 28 }}>
           <div
             style={{
-              width: 58,
-              height: 58,
+              width: 64,
+              height: 64,
               borderRadius: 18,
-              backgroundColor: '#FFC72C',
+              overflow: 'hidden',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -127,7 +127,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               marginBottom: 16,
             }}
           >
-            <ShieldCheck size={32} color="#0B1044" />
+            <img src="/logo.png" alt="Yaalu Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
 
           <h1

@@ -3,6 +3,7 @@ import { Bike, CheckCircle2, Phone, Star, ShieldCheck, Car, Truck, Landmark, Sav
 import { StatusBadge } from '../components/StatusBadge';
 import { Modal } from '../components/Modal';
 import { formatRiderId } from '../utils/formatId';
+import { Rider } from '../types';
 
 interface RidersProps {
   riders: Rider[];

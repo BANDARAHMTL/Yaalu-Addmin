@@ -3,6 +3,7 @@ import { Users, ShoppingCart, Store, Bike, AlertCircle, ArrowUpRight, CheckCircl
 import { StatCard } from '../components/StatCard';
 import { StatusBadge } from '../components/StatusBadge';
 import { formatOrderId } from '../utils/formatId';
+import { SystemStats, Order, Merchant, Rider, Product } from '../types';
 
 interface DashboardProps {
   stats: SystemStats;

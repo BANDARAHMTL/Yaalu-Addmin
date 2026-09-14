@@ -13,6 +13,7 @@ import {
   Sliders,
   AlertTriangle,
   Info,
+  Compass,
 } from 'lucide-react';
 import { adminApi } from '../services/api';
 import { FareSetting } from '../types';

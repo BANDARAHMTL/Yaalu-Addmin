@@ -102,17 +102,17 @@ export const Sidebar: React.FC<SidebarProps> = ({
         >
           <div
             style={{
-              width: 42,
-              height: 42,
+              width: 44,
+              height: 44,
               borderRadius: 12,
-              backgroundColor: '#FFC72C',
+              overflow: 'hidden',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               boxShadow: '0 4px 12px rgba(255, 199, 44, 0.4)',
             }}
           >
-            <ShieldCheck size={26} color="#0B1044" />
+            <img src="/logo.png" alt="Yaalu Logo" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
           </div>
           <div>
             <div style={{ fontSize: 18, fontWeight: 800, color: '#000000', letterSpacing: '-0.01em' }}>

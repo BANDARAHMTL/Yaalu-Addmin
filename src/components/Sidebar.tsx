@@ -79,13 +79,14 @@ export const Sidebar: React.FC<SidebarProps> = ({
     <aside
       style={{
         width: 270,
-        backgroundColor: 'var(--bg-sidebar)',
-        borderRight: '1px solid var(--border-dark)',
+        backgroundColor: '#FFFFFF',
+        borderRight: '1px solid #E2E8F0',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: '24px 16px',
         flexShrink: 0,
+        boxShadow: '2px 0 10px rgba(0, 0, 0, 0.02)',
       }}
     >
       <div>
@@ -104,20 +105,20 @@ export const Sidebar: React.FC<SidebarProps> = ({
               width: 42,
               height: 42,
               borderRadius: 12,
-              backgroundColor: 'var(--color-primary)',
+              backgroundColor: '#FFC72C',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 4px 12px rgba(245, 199, 72, 0.35)',
+              boxShadow: '0 4px 12px rgba(255, 199, 44, 0.4)',
             }}
           >
-            <ShieldCheck size={26} color="#0F172A" />
+            <ShieldCheck size={26} color="#0B1044" />
           </div>
           <div>
-            <div style={{ fontSize: 18, fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.01em' }}>
-              Yaalu<span style={{ color: 'var(--color-primary)' }}>Admin</span>
+            <div style={{ fontSize: 18, fontWeight: 800, color: '#000000', letterSpacing: '-0.01em' }}>
+              Yaalu<span style={{ color: '#991B1B' }}>Admin</span>
             </div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
+            <div style={{ fontSize: 11, color: '#1E3A8A', fontWeight: 800, textTransform: 'uppercase', letterSpacing: '0.05em' }}>
               Operations Portal
             </div>
           </div>
@@ -140,36 +141,37 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   padding: '10px 14px',
                   borderRadius: 12,
                   border: 'none',
-                  background: isActive ? 'var(--color-primary)' : 'transparent',
-                  color: isActive ? '#0F172A' : 'var(--text-secondary)',
-                  fontWeight: isActive ? 700 : 500,
+                  background: isActive ? '#FFC72C' : 'transparent',
+                  color: isActive ? '#000000' : '#0B1044',
+                  fontWeight: isActive ? 800 : 700,
                   fontSize: 13.5,
                   cursor: 'pointer',
                   transition: 'all 0.15s ease',
                   textAlign: 'left',
+                  boxShadow: isActive ? '0 4px 12px rgba(255, 199, 44, 0.35)' : 'none',
                 }}
                 onMouseEnter={(e) => {
                   if (!isActive) {
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.05)';
-                    e.currentTarget.style.color = '#FFFFFF';
+                    e.currentTarget.style.backgroundColor = '#FFFBEB';
+                    e.currentTarget.style.color = '#000000';
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isActive) {
                     e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = 'var(--text-secondary)';
+                    e.currentTarget.style.color = '#0B1044';
                   }
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                  <Icon size={18} color={isActive ? '#0F172A' : 'currentColor'} />
+                  <Icon size={18} color={isActive ? '#000000' : '#1E3A8A'} />
                   <span>{item.label}</span>
                 </div>
                 {item.badge && (
                   <span
                     style={{
-                      background: isActive ? '#0F172A' : item.badgeColor || 'var(--color-warning)',
-                      color: isActive ? '#FFFFFF' : '#0F172A',
+                      background: isActive ? '#000000' : item.badgeColor || '#991B1B',
+                      color: '#FFFFFF',
                       padding: '2px 7px',
                       borderRadius: 10,
                       fontSize: 11,
@@ -188,19 +190,19 @@ export const Sidebar: React.FC<SidebarProps> = ({
       {/* Footer / Status Card */}
       <div
         style={{
-          background: 'rgba(15, 23, 42, 0.6)',
-          border: '1px solid var(--border-dark)',
+          background: '#FFFBEB',
+          border: '1px solid #FEF08A',
           borderRadius: 14,
           padding: 14,
         }}
       >
         <div className="flex items-center justify-between" style={{ marginBottom: 6 }}>
-          <span style={{ fontSize: 12, color: 'var(--text-secondary)', fontWeight: 600 }}>Backend API</span>
+          <span style={{ fontSize: 12, color: '#991B1B', fontWeight: 800 }}>Backend API</span>
           <span className="badge badge-success" style={{ padding: '2px 8px', fontSize: 11 }}>
             Online
           </span>
         </div>
-        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+        <div style={{ fontSize: 11, color: '#0B1044', fontWeight: 600 }}>
           Connected to port 3001
         </div>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginTop: 10 }}>
@@ -211,9 +213,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
             className="flex items-center gap-1.5"
             style={{
               fontSize: 11.5,
-              color: 'var(--color-primary)',
+              color: '#1E3A8A',
               textDecoration: 'none',
-              fontWeight: 600,
+              fontWeight: 800,
             }}
           >
             <span>API Docs</span>
@@ -226,9 +228,9 @@ export const Sidebar: React.FC<SidebarProps> = ({
               style={{
                 background: 'transparent',
                 border: 'none',
-                color: '#F87171',
+                color: '#991B1B',
                 fontSize: 11.5,
-                fontWeight: 600,
+                fontWeight: 800,
                 cursor: 'pointer',
                 display: 'flex',
                 alignItems: 'center',
@@ -236,7 +238,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 padding: '2px 6px',
                 borderRadius: 6,
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(239, 68, 68, 0.1)')}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#FEE2E2')}
               onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
             >
               <LogOut size={12} />

@@ -138,35 +138,35 @@ export const BidManagement: React.FC<BidManagementProps> = ({ onNotify }) => {
       {/* Stats Cards */}
       <div className="grid grid-cols-4 gap-4">
         <div className="card" style={{ padding: 16 }}>
-          <div className="flex items-center justify-between" style={{ color: 'var(--text-muted)', fontSize: 12 }}>
-            <span>Tuk Tuk Bid Window</span>
-            <Car size={16} color="var(--color-primary)" />
+          <div className="flex items-center justify-between" style={{ color: '#0B1044', fontSize: 12, fontWeight: 700 }}>
+            <span>Three Wheel Bidding Window</span>
+            <Compass size={16} color="#0B1044" />
           </div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: 'var(--color-primary)', marginTop: 8 }}>
+          <div style={{ fontSize: 22, fontWeight: 900, color: '#000000', marginTop: 8 }}>
             {settings.find((s) => s.vehicleType === 'THREE_WHEEL')?.bidTimeoutMinutes ?? 2.0} Min
           </div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+          <div style={{ fontSize: 11, color: '#1E3A8A', marginTop: 4, fontWeight: 600 }}>
             {Math.round((settings.find((s) => s.vehicleType === 'THREE_WHEEL')?.bidTimeoutMinutes ?? 2.0) * 60)}s countdown
           </div>
         </div>
 
         <div className="card" style={{ padding: 16 }}>
-          <div className="flex items-center justify-between" style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+          <div className="flex items-center justify-between" style={{ color: '#0B1044', fontSize: 12, fontWeight: 700 }}>
             <span>Bike Delivery Window</span>
-            <Bike size={16} color="#10B981" />
+            <Bike size={16} color="#0B1044" />
           </div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: '#10B981', marginTop: 8 }}>
+          <div style={{ fontSize: 22, fontWeight: 900, color: '#000000', marginTop: 8 }}>
             {settings.find((s) => s.vehicleType === 'MOTORBIKE')?.bidTimeoutMinutes ?? 2.0} Min
           </div>
-          <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>Fast dispatch limit</div>
+          <div style={{ fontSize: 11, color: '#1E3A8A', marginTop: 4, fontWeight: 600 }}>Fast dispatch limit</div>
         </div>
 
         <div className="card" style={{ padding: 16 }}>
-          <div className="flex items-center justify-between" style={{ color: 'var(--text-muted)', fontSize: 12 }}>
+          <div className="flex items-center justify-between" style={{ color: '#0B1044', fontSize: 12, fontWeight: 700 }}>
             <span>Car / Taxi Window</span>
-            <Car size={16} color="#3B82F6" />
+            <Car size={16} color="#0B1044" />
           </div>
-          <div style={{ fontSize: 22, fontWeight: 900, color: '#3B82F6', marginTop: 8 }}>
+          <div style={{ fontSize: 22, fontWeight: 900, color: '#000000', marginTop: 8 }}>
             {settings.find((s) => s.vehicleType === 'CAR')?.bidTimeoutMinutes ?? 3.0} Min
           </div>
           <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>City passenger rides</div>

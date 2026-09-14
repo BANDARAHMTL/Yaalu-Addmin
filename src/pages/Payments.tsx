@@ -84,13 +84,13 @@ export const Payments: React.FC<PaymentsProps> = ({
   const getMethodIcon = (method: PaymentMethod) => {
     switch (method) {
       case 'BANK_TRANSFER':
-        return <Building size={14} color="var(--color-primary)" />;
+        return <Building size={14} color="#0B1044" />;
       case 'QR_PAY':
-        return <QrCode size={14} color="#8B5CF6" />;
+        return <QrCode size={14} color="#0B1044" />;
       case 'CARD':
-        return <CreditCard size={14} color="#10B981" />;
+        return <CreditCard size={14} color="#0B1044" />;
       default:
-        return <DollarSign size={14} color="#3B82F6" />;
+        return <DollarSign size={14} color="#0B1044" />;
     }
   };
 
@@ -99,22 +99,22 @@ export const Payments: React.FC<PaymentsProps> = ({
       {/* Header & Verification Metric Cards */}
       <div className="grid grid-cols-3 gap-4">
         <div className="card" style={{ padding: 18 }}>
-          <div style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>Pending Verifications</div>
+          <div style={{ fontSize: 12.5, color: '#1E3A8A', fontWeight: 700 }}>Pending Verifications</div>
           <div className="flex items-center justify-between" style={{ marginTop: 4 }}>
-            <div style={{ fontSize: 26, fontWeight: 800, color: pendingCount > 0 ? 'var(--color-warning)' : '#FFFFFF' }}>
+            <div style={{ fontSize: 26, fontWeight: 800, color: pendingCount > 0 ? '#991B1B' : '#000000' }}>
               {pendingCount} Transfers
             </div>
-            <Clock size={24} color={pendingCount > 0 ? '#F59E0B' : 'var(--text-muted)'} />
+            <Clock size={24} color={pendingCount > 0 ? '#991B1B' : '#0B1044'} />
           </div>
         </div>
 
         <div className="card" style={{ padding: 18 }}>
-          <div style={{ fontSize: 12.5, color: 'var(--color-success)' }}>Verified & Settled</div>
+          <div style={{ fontSize: 12.5, color: '#0B1044', fontWeight: 700 }}>Verified & Settled</div>
           <div className="flex items-center justify-between" style={{ marginTop: 4 }}>
-            <div style={{ fontSize: 26, fontWeight: 800, color: 'var(--color-success)' }}>
+            <div style={{ fontSize: 26, fontWeight: 800, color: '#000000' }}>
               LKR {totalVerifiedAmount.toLocaleString()}
             </div>
-            <ShieldCheck size={24} color="#10B981" />
+            <ShieldCheck size={24} color="#0B1044" />
           </div>
         </div>
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Eye, Clock, CheckCircle, PackageCheck, Truck, XCircle, MapPin, Phone, User } from 'lucide-react';
 import { StatusBadge } from '../components/StatusBadge';
 import { Modal } from '../components/Modal';
-import { Order, OrderStatus } from '../types';
+import { formatOrderId } from '../utils/formatId';
 
 interface OrdersProps {
   orders: Order[];
@@ -88,7 +88,7 @@ export const Orders: React.FC<OrdersProps> = ({ orders, onUpdateOrderStatus, sea
               filteredOrders.map((o) => (
                 <tr key={o.id}>
                   <td style={{ fontWeight: 800, color: 'var(--color-primary)' }}>
-                    #{o.id}
+                    #{formatOrderId(o.id)}
                   </td>
                   <td>
                     <div style={{ fontWeight: 700 }}>{o.customerName || 'Customer'}</div>
@@ -139,7 +139,7 @@ export const Orders: React.FC<OrdersProps> = ({ orders, onUpdateOrderStatus, sea
         <Modal
           isOpen={!!selectedOrder}
           onClose={() => setSelectedOrder(null)}
-          title={`Order #${selectedOrder.id} Overview`}
+          title={`Order #${formatOrderId(selectedOrder.id)} Overview`}
           maxWidth={620}
         >
           <div style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>

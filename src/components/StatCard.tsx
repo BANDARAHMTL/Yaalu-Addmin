@@ -17,13 +17,13 @@ export const StatCard: React.FC<StatCardProps> = ({
   change,
   isPositive = true,
   icon: Icon,
-  iconBg = 'rgba(245, 199, 72, 0.15)',
-  iconColor = '#F5C748',
+  iconBg = '#FFFBEB',
+  iconColor = '#991B1B',
 }) => {
   return (
     <div className="card card-interactive" style={{ position: 'relative', overflow: 'hidden' }}>
       <div className="flex items-center justify-between" style={{ marginBottom: 16 }}>
-        <span style={{ fontSize: 13.5, color: 'var(--text-secondary)', fontWeight: 600 }}>
+        <span style={{ fontSize: 13.5, color: '#0B1044', fontWeight: 800 }}>
           {title}
         </span>
         <div
@@ -41,7 +41,7 @@ export const StatCard: React.FC<StatCardProps> = ({
         </div>
       </div>
 
-      <div style={{ fontSize: 28, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.02em' }}>
+      <div style={{ fontSize: 28, fontWeight: 800, color: '#000000', letterSpacing: '-0.02em' }}>
         {value}
       </div>
 
@@ -50,15 +50,15 @@ export const StatCard: React.FC<StatCardProps> = ({
           <span
             style={{
               fontSize: 12.5,
-              fontWeight: 700,
-              color: isPositive ? 'var(--color-success)' : 'var(--color-danger)',
+              fontWeight: 800,
+              color: isPositive ? '#0B1044' : '#991B1B',
               display: 'inline-flex',
               alignItems: 'center',
             }}
           >
             {isPositive ? '↑ +' : '↓ -'}{change}
           </span>
-          <span style={{ fontSize: 12, color: 'var(--text-muted)' }}>vs last month</span>
+          <span style={{ fontSize: 12, color: '#1E3A8A', fontWeight: 600 }}>vs last month</span>
         </div>
       )}
     </div>

@@ -3,42 +3,45 @@
 :root {
   --font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   
-  /* Yaalu Signature Color Tokens */
-  --color-primary: #F5C748;
-  --color-primary-hover: #E5B734;
-  --color-primary-light: rgba(245, 199, 72, 0.15);
+  /* Yaalu Signature Yellow & Crisp White Palette */
+  --color-primary: #FFC72C;
+  --color-primary-hover: #EAB308;
+  --color-primary-light: #FFFBEB;
+  --color-primary-dark: #991B1B;
   
-  --bg-dark: #090D16;
-  --bg-dark-card: #111827;
-  --bg-dark-card-hover: #162032;
-  --bg-sidebar: #0B1120;
+  --bg-dark: #F8FAFC;
+  --bg-dark-card: #FFFFFF;
+  --bg-dark-card-hover: #FFFDF0;
+  --bg-sidebar: #FFFFFF;
+  --bg-header: #FFFFFF;
   
-  --border-dark: rgba(255, 255, 255, 0.08);
-  --border-light: rgba(0, 0, 0, 0.08);
+  --border-dark: #E2E8F0;
+  --border-light: #F1F5F9;
   
-  --text-primary: #F8FAFC;
-  --text-secondary: #94A3B8;
-  --text-muted: #64748B;
+  /* High-Contrast STRICT Color Palette for Text (ONLY Black #000000, Dark Blue #0B1044, Dark Red #991B1B) */
+  --text-primary: #000000;       /* Pure Crisp Black for Main Headings & Titles */
+  --text-secondary: #0B1044;     /* Deep Dark Navy Blue for Subtitles, Labels & Body */
+  --text-muted: #1E3A8A;         /* Rich Dark Blue for Secondary Info */
   
-  --color-success: #10B981;
-  --color-success-bg: rgba(16, 185, 129, 0.12);
+  --color-success: #0B1044;       /* Dark Navy Blue */
+  --color-success-bg: #DBEAFE;
   
-  --color-warning: #F59E0B;
-  --color-warning-bg: rgba(245, 158, 11, 0.12);
+  --color-warning: #991B1B;       /* Dark Red */
+  --color-warning-bg: #FEE2E2;
   
-  --color-danger: #EF4444;
-  --color-danger-bg: rgba(239, 68, 68, 0.12);
+  --color-danger: #991B1B;        /* Dark Red */
+  --color-danger-bg: #FEE2E2;
   
-  --color-info: #3B82F6;
-  --color-info-bg: rgba(59, 130, 246, 0.12);
+  --color-info: #0B1044;          /* Dark Navy Blue */
+  --color-info-bg: #DBEAFE;
   
-  --color-purple: #8B5CF6;
-  --color-purple-bg: rgba(139, 92, 246, 0.12);
+  --color-purple: #0B1044;        /* Dark Navy Blue */
+  --color-purple-bg: #F3E8FF;
 
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.25);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.35), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.25);
-  --shadow-glow: 0 0 25px rgba(245, 199, 72, 0.2);
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 14px 0 rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 10px 25px -3px rgba(0, 0, 0, 0.08);
+  --shadow-glow: 0 4px 20px rgba(255, 199, 44, 0.35);
 }
 
 * {
@@ -62,10 +65,10 @@ body {
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: rgba(15, 23, 42, 0.6);
+  background: #F1F5F9;
 }
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.18);
+  background: #CBD5E1;
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
@@ -86,6 +89,7 @@ body {
   min-width: 0;
   height: 100vh;
   overflow-y: auto;
+  background-color: var(--bg-dark);
 }
 
 .page-container {
@@ -103,16 +107,17 @@ body {
   padding: 24px;
   transition: all 0.2s ease;
   box-shadow: var(--shadow-md);
+  color: #000000;
 }
 
 .card:hover {
-  border-color: rgba(255, 255, 255, 0.15);
+  border-color: #FDE047;
 }
 
 .card-interactive:hover {
   transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
-  border-color: rgba(245, 199, 72, 0.3);
+  border-color: var(--color-primary);
 }
 
 /* Buttons */
@@ -123,7 +128,7 @@ body {
   gap: 8px;
   padding: 10px 18px;
   border-radius: 10px;
-  font-weight: 600;
+  font-weight: 800;
   font-size: 14px;
   cursor: pointer;
   border: none;
@@ -134,30 +139,35 @@ body {
 
 .btn-primary {
   background: var(--color-primary);
-  color: #0F172A;
-  box-shadow: 0 2px 10px rgba(245, 199, 72, 0.25);
+  color: #000000;
+  font-weight: 800;
+  box-shadow: 0 4px 14px rgba(255, 199, 44, 0.4);
 }
 .btn-primary:hover {
   background: var(--color-primary-hover);
   transform: translateY(-1px);
-  box-shadow: 0 4px 15px rgba(245, 199, 72, 0.4);
+  box-shadow: 0 6px 18px rgba(255, 199, 44, 0.5);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  color: var(--text-primary);
-  border: 1px solid var(--border-dark);
+  background: #FFFFFF;
+  color: #0B1044;
+  border: 1px solid #CBD5E1;
+  font-weight: 800;
 }
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.14);
+  background: #FFFBEB;
+  border-color: var(--color-primary);
+  color: #000000;
 }
 
 .btn-danger {
-  background: var(--color-danger);
+  background: #991B1B;
   color: #FFFFFF;
+  font-weight: 800;
 }
 .btn-danger:hover {
-  background: #DC2626;
+  background: #7F1D1D;
 }
 
 .btn-sm {
@@ -186,34 +196,36 @@ body {
 
 .input-label {
   font-size: 13px;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-weight: 800;
+  color: #0B1044;
 }
 
 .input-field, .select-field, .textarea-field {
   width: 100%;
   padding: 11px 14px;
-  background: rgba(15, 23, 42, 0.8);
-  border: 1px solid var(--border-dark);
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
   border-radius: 10px;
-  color: var(--text-primary);
+  color: #000000;
   font-family: inherit;
   font-size: 14px;
+  font-weight: 700;
   outline: none;
   transition: all 0.2s;
 }
 
 .input-field:focus, .select-field:focus, .textarea-field:focus {
   border-color: var(--color-primary);
-  box-shadow: 0 0 0 2px rgba(245, 199, 72, 0.2);
+  box-shadow: 0 0 0 3px rgba(255, 199, 44, 0.3);
 }
 
 /* Tables */
 .table-container {
   overflow-x: auto;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--border-dark);
-  background: rgba(17, 24, 39, 0.7);
+  background: #FFFFFF;
+  box-shadow: var(--shadow-sm);
 }
 
 .custom-table {
@@ -225,19 +237,20 @@ body {
 
 .custom-table th {
   padding: 14px 18px;
-  background: rgba(11, 17, 32, 0.8);
-  color: var(--text-muted);
-  font-weight: 600;
+  background: #FFFBEB;
+  color: #000000;
+  font-weight: 800;
   text-transform: uppercase;
   font-size: 11.5px;
   letter-spacing: 0.05em;
-  border-bottom: 1px solid var(--border-dark);
+  border-bottom: 2px solid #FEF08A;
 }
 
 .custom-table td {
   padding: 16px 18px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
-  color: var(--text-primary);
+  border-bottom: 1px solid #F1F5F9;
+  color: #000000;
+  font-weight: 700;
   vertical-align: middle;
 }
 
@@ -246,7 +259,7 @@ body {
 }
 
 .custom-table tr:hover td {
-  background: rgba(255, 255, 255, 0.02);
+  background: #FFFDF0;
 }
 
 /* Status Badges */
@@ -257,21 +270,21 @@ body {
   padding: 4px 10px;
   border-radius: 20px;
   font-size: 12px;
-  font-weight: 600;
+  font-weight: 800;
   text-transform: capitalize;
 }
 
-.badge-success { background: var(--color-success-bg); color: var(--color-success); }
-.badge-warning { background: var(--color-warning-bg); color: var(--color-warning); }
-.badge-danger { background: var(--color-danger-bg); color: var(--color-danger); }
-.badge-info { background: var(--color-info-bg); color: var(--color-info); }
-.badge-purple { background: var(--color-purple-bg); color: var(--color-purple); }
+.badge-success { background: #DBEAFE; color: #0B1044; }
+.badge-warning { background: #FEE2E2; color: #991B1B; }
+.badge-danger { background: #FEE2E2; color: #991B1B; }
+.badge-info { background: #DBEAFE; color: #0B1044; }
+.badge-purple { background: #F3E8FF; color: #0B1044; }
 
 /* Modal Backdrop & Container */
 .modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.75);
+  background: rgba(11, 16, 68, 0.5);
   backdrop-filter: blur(6px);
   display: flex;
   align-items: center;
@@ -282,15 +295,16 @@ body {
 }
 
 .modal-content {
-  background: var(--bg-dark-card);
+  background: #FFFFFF;
   border: 1px solid var(--border-dark);
-  border-radius: 18px;
+  border-radius: 20px;
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
   box-shadow: var(--shadow-lg);
   animation: scaleUp 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #000000;
 }
 
 @keyframes fadeIn {

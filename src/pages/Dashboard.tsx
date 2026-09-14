@@ -2,7 +2,7 @@ import React from 'react';
 import { Users, ShoppingCart, Store, Bike, AlertCircle, ArrowUpRight, CheckCircle2, Clock } from 'lucide-react';
 import { StatCard } from '../components/StatCard';
 import { StatusBadge } from '../components/StatusBadge';
-import { Merchant, Order, Product, Rider, SystemStats } from '../types';
+import { formatOrderId } from '../utils/formatId';
 
 interface DashboardProps {
   stats: SystemStats;
@@ -30,8 +30,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
       {stats.pendingApprovals > 0 && (
         <div
           style={{
-            background: 'linear-gradient(90deg, rgba(239, 68, 68, 0.15) 0%, rgba(220, 38, 38, 0.05) 100%)',
-            border: '1px solid rgba(239, 68, 68, 0.3)',
+            background: '#FEE2E2',
+            border: '1px solid #FCA5A5',
             borderRadius: 14,
             padding: '16px 20px',
             display: 'flex',
@@ -45,26 +45,26 @@ export const Dashboard: React.FC<DashboardProps> = ({
                 width: 36,
                 height: 36,
                 borderRadius: '50%',
-                backgroundColor: 'rgba(239, 68, 68, 0.2)',
+                backgroundColor: '#FECDD3',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                color: '#EF4444',
+                color: '#991B1B',
               }}
             >
               <AlertCircle size={20} />
             </div>
             <div>
-              <div style={{ fontWeight: 700, color: '#F8FAFC', fontSize: 14.5 }}>
+              <div style={{ fontWeight: 800, color: '#991B1B', fontSize: 14.5 }}>
                 {stats.pendingApprovals} Verification Request{stats.pendingApprovals > 1 ? 's' : ''} Pending Review
               </div>
-              <div style={{ fontSize: 12.5, color: 'var(--text-secondary)' }}>
+              <div style={{ fontSize: 12.5, color: '#0B1044', fontWeight: 600 }}>
                 New merchant shops and delivery riders require your manual verification.
               </div>
             </div>
           </div>
           <button
-            className="btn btn-primary btn-sm"
+            className="btn btn-danger btn-sm"
             onClick={() => onNavigate(pendingMerchants.length > 0 ? 'merchants' : 'riders')}
           >
             Review Now
@@ -80,8 +80,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
           change="All Roles"
           isPositive={true}
           icon={Users}
-          iconBg="rgba(16, 185, 129, 0.15)"
-          iconColor="#10B981"
+          iconBg="#DBEAFE"
+          iconColor="#1E3A8A"
         />
         <StatCard
           title="Total Orders Processed"
@@ -89,8 +89,8 @@ export const Dashboard: React.FC<DashboardProps> = ({
           change="12.1%"
           isPositive={true}
           icon={ShoppingCart}
-          iconBg="rgba(59, 130, 246, 0.15)"
-          iconColor="#3B82F6"
+          iconBg="#FEE2E2"
+          iconColor="#991B1B"
         />
         <StatCard
           title="Registered Merchants"
@@ -98,15 +98,15 @@ export const Dashboard: React.FC<DashboardProps> = ({
           change="4 new"
           isPositive={true}
           icon={Store}
-          iconBg="rgba(245, 199, 72, 0.15)"
-          iconColor="#F5C748"
+          iconBg="#FFFBEB"
+          iconColor="#000000"
         />
         <StatCard
           title="Active Riders Online"
           value={`${activeRidersList.length} / ${riders.length}`}
           icon={Bike}
-          iconBg="rgba(139, 92, 246, 0.15)"
-          iconColor="#8B5CF6"
+          iconBg="#F3E8FF"
+          iconColor="#5B21B6"
         />
       </div>
 
@@ -116,10 +116,10 @@ export const Dashboard: React.FC<DashboardProps> = ({
         <div className="card" style={{ gridColumn: 'span 2' }}>
           <div className="flex items-center justify-between" style={{ marginBottom: 20 }}>
             <div>
-              <h2 style={{ fontSize: 17, fontWeight: 700, color: 'var(--text-primary)' }}>
+              <h2 style={{ fontSize: 17, fontWeight: 800, color: '#000000' }}>
                 Recent Platform Orders
               </h2>
-              <p style={{ fontSize: 12.5, color: 'var(--text-muted)' }}>
+              <p style={{ fontSize: 12.5, color: '#0B1044', fontWeight: 600 }}>
                 Live feed of purchases across all registered merchants
               </p>
             </div>
@@ -142,19 +142,19 @@ export const Dashboard: React.FC<DashboardProps> = ({
               <tbody>
                 {orders.slice(0, 5).map((order) => (
                   <tr key={order.id}>
-                    <td style={{ fontWeight: 700, color: 'var(--color-primary)' }}>
-                      #{order.id}
+                    <td style={{ fontWeight: 800, color: '#991B1B' }}>
+                      #{formatOrderId(order.id)}
                     </td>
                     <td>
-                      <div style={{ fontWeight: 600 }}>{order.customerName}</div>
-                      <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>
+                      <div style={{ fontWeight: 800, color: '#000000' }}>{order.customerName}</div>
+                      <div style={{ fontSize: 11.5, color: '#1E3A8A', fontWeight: 600 }}>
                         {order.customerPhone || 'Direct App'}
                       </div>
                     </td>
-                    <td style={{ color: 'var(--text-secondary)' }}>
+                    <td style={{ color: '#0B1044', fontWeight: 700 }}>
                       {order.merchantName || 'General Store'}
                     </td>
-                    <td style={{ fontWeight: 700 }}>
+                    <td style={{ fontWeight: 800, color: '#000000' }}>
                       LKR {order.totalAmount.toLocaleString()}
                     </td>
                     <td>
@@ -171,7 +171,7 @@ export const Dashboard: React.FC<DashboardProps> = ({
         <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
           {/* Top Selling Merchants Card */}
           <div className="card">
-            <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 16, color: 'var(--text-primary)' }}>
+            <h2 style={{ fontSize: 16, fontWeight: 800, marginBottom: 16, color: '#000000' }}>
               Top Partner Outlets
             </h2>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
@@ -184,16 +184,16 @@ export const Dashboard: React.FC<DashboardProps> = ({
                       style={{ width: 36, height: 36, borderRadius: 10, objectFit: 'cover' }}
                     />
                     <div>
-                      <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--text-primary)' }}>
+                      <div style={{ fontSize: 13.5, fontWeight: 800, color: '#000000' }}>
                         {m.shopName}
                       </div>
-                      <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>
+                      <div style={{ fontSize: 11.5, color: '#1E3A8A', fontWeight: 600 }}>
                         {m.totalProducts || products.length} products listed
                       </div>
                     </div>
                   </div>
                   <div style={{ textAlign: 'right' }}>
-                    <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-success)' }}>
+                    <div style={{ fontSize: 13, fontWeight: 800, color: '#991B1B' }}>
                       LKR {(m.revenue || 250000).toLocaleString()}
                     </div>
                   </div>

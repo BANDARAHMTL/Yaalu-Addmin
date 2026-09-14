@@ -62,9 +62,9 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#090D16',
+        backgroundColor: '#F8FAFC',
         backgroundImage:
-          'radial-gradient(at 10% 20%, rgba(245, 199, 72, 0.08) 0px, transparent 50%), radial-gradient(at 90% 80%, rgba(16, 185, 129, 0.06) 0px, transparent 50%)',
+          'radial-gradient(at 10% 20%, rgba(255, 199, 44, 0.25) 0px, transparent 50%), radial-gradient(at 90% 80%, rgba(254, 240, 138, 0.3) 0px, transparent 50%)',
         padding: 24,
         position: 'relative',
         overflow: 'hidden',
@@ -77,7 +77,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           width: 600,
           height: 600,
           borderRadius: '50%',
-          border: '1px solid rgba(255, 255, 255, 0.03)',
+          border: '1px solid rgba(255, 199, 44, 0.15)',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
@@ -90,7 +90,7 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           width: 900,
           height: 900,
           borderRadius: '50%',
-          border: '1px solid rgba(255, 255, 255, 0.02)',
+          border: '1px solid rgba(255, 199, 44, 0.1)',
           top: '50%',
           left: '50%',
           transform: 'translate(-50%, -50%)',
@@ -102,12 +102,12 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         style={{
           width: '100%',
           maxWidth: 460,
-          backgroundColor: 'rgba(15, 23, 42, 0.85)',
+          backgroundColor: '#FFFFFF',
           backdropFilter: 'blur(20px)',
-          border: '1px solid rgba(255, 255, 255, 0.09)',
+          border: '1px solid #E2E8F0',
           borderRadius: 24,
           padding: '40px 36px',
-          boxShadow: '0 25px 60px -15px rgba(0, 0, 0, 0.7)',
+          boxShadow: '0 20px 40px -15px rgba(0, 0, 0, 0.08)',
           position: 'relative',
           zIndex: 10,
         }}
@@ -119,29 +119,29 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
               width: 58,
               height: 58,
               borderRadius: 18,
-              backgroundColor: 'var(--color-primary)',
+              backgroundColor: '#FFC72C',
               display: 'inline-flex',
               alignItems: 'center',
               justifyContent: 'center',
-              boxShadow: '0 10px 25px rgba(245, 199, 72, 0.35)',
+              boxShadow: '0 10px 25px rgba(255, 199, 44, 0.4)',
               marginBottom: 16,
             }}
           >
-            <ShieldCheck size={32} color="#0F172A" />
+            <ShieldCheck size={32} color="#0B1044" />
           </div>
 
           <h1
             style={{
               fontSize: 24,
               fontWeight: 800,
-              color: '#FFFFFF',
+              color: '#000000',
               letterSpacing: '-0.02em',
               marginBottom: 6,
             }}
           >
-            Yaalu<span style={{ color: 'var(--color-primary)' }}>Admin</span>
+            Yaalu<span style={{ color: '#991B1B' }}>Admin</span>
           </h1>
-          <p style={{ fontSize: 13.5, color: 'var(--text-muted)' }}>
+          <p style={{ fontSize: 13.5, color: '#1E3A8A', fontWeight: 700 }}>
             Super Administrator Secure Access Console
           </p>
         </div>
@@ -149,8 +149,8 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
         {/* Security Policy Notice - Registration Disabled */}
         <div
           style={{
-            backgroundColor: 'rgba(239, 68, 68, 0.08)',
-            border: '1px solid rgba(239, 68, 68, 0.25)',
+            backgroundColor: '#FEE2E2',
+            border: '1px solid #FCA5A5',
             borderRadius: 14,
             padding: '12px 14px',
             display: 'flex',
@@ -159,8 +159,8 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
             marginBottom: 24,
           }}
         >
-          <ShieldAlert size={18} color="#EF4444" style={{ flexShrink: 0, marginTop: 2 }} />
-          <div style={{ fontSize: 12, color: '#FCA5A5', lineHeight: 1.5 }}>
+          <ShieldAlert size={18} color="#991B1B" style={{ flexShrink: 0, marginTop: 2 }} />
+          <div style={{ fontSize: 12, color: '#991B1B', fontWeight: 700, lineHeight: 1.5 }}>
             <strong>Registration Restricted:</strong> Self-registration is strictly disabled for administrator security. Only pre-authorized administrative credentials can sign in.
           </div>
         </div>
@@ -344,8 +344,8 @@ export const Login: React.FC<LoginProps> = ({ onLoginSuccess }) => {
           style={{
             marginTop: 28,
             padding: 16,
-            backgroundColor: 'rgba(245, 199, 72, 0.05)',
-            border: '1px dashed rgba(245, 199, 72, 0.25)',
+            backgroundColor: '#FFFBEB',
+            border: '1px dashed #FDE047',
             borderRadius: 14,
           }}
         >

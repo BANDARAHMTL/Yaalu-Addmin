@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { DollarSign, CheckCircle2, Clock } from 'lucide-react';
 import { StatusBadge } from '../components/StatusBadge';
-import { Invoice } from '../types';
+import { formatShortId } from '../utils/formatId';
 
 interface InvoicesProps {
   invoices: Invoice[];
@@ -89,7 +89,7 @@ export const Invoices: React.FC<InvoicesProps> = ({ invoices, onMarkPaid, search
               filteredInvoices.map((inv) => (
                 <tr key={inv.id}>
                   <td style={{ fontWeight: 800, color: 'var(--color-primary)' }}>
-                    #{inv.id}
+                    #{formatShortId(inv.id, 50000)}
                   </td>
                   <td style={{ fontWeight: 600 }}>
                     {inv.customerName || 'Walk-in Customer'}

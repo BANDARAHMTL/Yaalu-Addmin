@@ -30,19 +30,20 @@ export const Header: React.FC<HeaderProps> = ({
         alignItems: 'center',
         justifyContent: 'space-between',
         padding: '18px 32px',
-        backgroundColor: 'var(--bg-sidebar)',
-        borderBottom: '1px solid var(--border-dark)',
+        backgroundColor: '#FFFFFF',
+        borderBottom: '1px solid #E2E8F0',
         position: 'sticky',
         top: 0,
         zIndex: 50,
+        boxShadow: '0 2px 10px rgba(0, 0, 0, 0.02)',
       }}
     >
       <div>
-        <h1 style={{ fontSize: 22, fontWeight: 800, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
+        <h1 style={{ fontSize: 22, fontWeight: 800, color: '#000000', letterSpacing: '-0.01em' }}>
           {title}
         </h1>
         {subtitle && (
-          <p style={{ fontSize: 13, color: 'var(--text-muted)', marginTop: 2 }}>
+          <p style={{ fontSize: 13, color: '#1E3A8A', marginTop: 2, fontWeight: 700 }}>
             {subtitle}
           </p>
         )}
@@ -53,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div style={{ position: 'relative', width: 280 }}>
           <Search
             size={16}
-            color="var(--text-muted)"
+            color="#1E3A8A"
             style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)' }}
           />
           <input
@@ -68,6 +69,10 @@ export const Header: React.FC<HeaderProps> = ({
               paddingBottom: 8,
               fontSize: 13,
               borderRadius: 10,
+              backgroundColor: '#F8FAFC',
+              borderColor: '#E2E8F0',
+              color: '#000000',
+              fontWeight: 600,
             }}
           />
         </div>
@@ -80,22 +85,23 @@ export const Header: React.FC<HeaderProps> = ({
             title="Refresh Data"
             disabled={isRefreshing}
           >
-            <RefreshCw size={16} className={isRefreshing ? 'spin' : ''} />
+            <RefreshCw size={16} color="#0B1044" className={isRefreshing ? 'spin' : ''} />
           </button>
         )}
 
         {/* Notification Bell */}
         <button className="btn btn-secondary btn-icon" style={{ position: 'relative' }}>
-          <Bell size={17} />
+          <Bell size={17} color="#0B1044" />
           <span
             style={{
               position: 'absolute',
               top: 6,
               right: 6,
-              width: 7,
-              height: 7,
+              width: 8,
+              height: 8,
               borderRadius: '50%',
-              backgroundColor: 'var(--color-primary)',
+              backgroundColor: '#991B1B',
+              border: '2px solid #FFFFFF',
             }}
           />
         </button>
@@ -108,8 +114,8 @@ export const Header: React.FC<HeaderProps> = ({
               alignItems: 'center',
               gap: 10,
               padding: '6px 14px',
-              backgroundColor: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid var(--border-dark)',
+              backgroundColor: '#FFFBEB',
+              border: '1px solid #FEF08A',
               borderRadius: 12,
             }}
           >
@@ -122,7 +128,7 @@ export const Header: React.FC<HeaderProps> = ({
                   height: 32,
                   borderRadius: '50%',
                   objectFit: 'cover',
-                  border: '1px solid rgba(245, 199, 72, 0.5)',
+                  border: '2px solid #FFC72C',
                 }}
               />
             ) : (
@@ -131,21 +137,20 @@ export const Header: React.FC<HeaderProps> = ({
                   width: 32,
                   height: 32,
                   borderRadius: '50%',
-                  backgroundColor: 'var(--color-primary-light)',
-                  border: '1px solid rgba(245, 199, 72, 0.4)',
+                  backgroundColor: '#FFC72C',
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
                 }}
               >
-                <UserCheck size={16} color="var(--color-primary)" />
+                <UserCheck size={16} color="#0B1044" />
               </div>
             )}
             <div>
-              <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--text-primary)' }}>
+              <div style={{ fontSize: 13, fontWeight: 800, color: '#000000' }}>
                 {currentUser?.fullName || 'Super Admin'}
               </div>
-              <div style={{ fontSize: 11, color: 'var(--color-success)', fontWeight: 600 }}>
+              <div style={{ fontSize: 11, color: '#991B1B', fontWeight: 800 }}>
                 {currentUser?.email || 'admin@yaalu.lk'}
               </div>
             </div>
@@ -162,10 +167,10 @@ export const Header: React.FC<HeaderProps> = ({
                 gap: 6,
                 padding: '8px 12px',
                 fontSize: 12.5,
-                fontWeight: 600,
-                color: '#F87171',
-                borderColor: 'rgba(239, 68, 68, 0.3)',
-                backgroundColor: 'rgba(239, 68, 68, 0.05)',
+                fontWeight: 800,
+                color: '#991B1B',
+                borderColor: '#FCA5A5',
+                backgroundColor: '#FEE2E2',
               }}
             >
               <LogOut size={15} />

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Bike, CheckCircle2, Phone, Star, ShieldCheck, Car, Truck, Landmark, Save, Edit3 } from 'lucide-react';
 import { StatusBadge } from '../components/StatusBadge';
 import { Modal } from '../components/Modal';
-import { Rider } from '../types';
+import { formatRiderId } from '../utils/formatId';
 
 interface RidersProps {
   riders: Rider[];
@@ -184,7 +184,7 @@ export const Riders: React.FC<RidersProps> = ({
                           {r.fullName}
                         </div>
                         <div style={{ fontSize: 11.5, color: 'var(--text-muted)' }}>
-                          ID: {r.id}
+                          ID: #{formatRiderId(r.id)}
                         </div>
                       </div>
                     </div>
@@ -211,8 +211,8 @@ export const Riders: React.FC<RidersProps> = ({
                     </code>
                   </td>
                   <td>
-                    <div className="flex items-center gap-1" style={{ fontWeight: 700, color: '#F59E0B' }}>
-                      <Star size={13} fill="#F59E0B" /> {r.rating || '5.0'}
+                    <div className="flex items-center gap-1" style={{ fontWeight: 800, color: '#991B1B' }}>
+                      <Star size={13} fill="#991B1B" /> {r.rating || '5.0'}
                     </div>
                     <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
                       {r.deliveriesCompleted || 0} deliveries completed

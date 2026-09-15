@@ -16,6 +16,7 @@ import {
   Percent,
   Timer,
   LogOut,
+  Car,
 } from 'lucide-react';
 
 export type TabType =
@@ -24,6 +25,7 @@ export type TabType =
   | 'payments'
   | 'merchants'
   | 'riders'
+  | 'hire_mgmt'
   | 'fare_engine'
   | 'commission_mgmt'
   | 'bid_mgmt'
@@ -65,6 +67,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
       badge: pendingCount > 0 ? `${pendingCount}` : undefined,
     },
     { id: 'riders', label: 'Delivery Riders', icon: Bike },
+    { id: 'hire_mgmt', label: 'Hire Management', icon: Car },
     { id: 'fare_engine', label: 'Fare Pricing Engine', icon: Calculator },
     { id: 'commission_mgmt', label: 'Commission Management', icon: Percent },
     { id: 'bid_mgmt', label: 'Bid Management', icon: Timer },

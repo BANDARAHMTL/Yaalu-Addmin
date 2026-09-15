@@ -481,6 +481,42 @@ class AdminApiService {
     }
     return await res.json();
   }
+
+  // ─── Hire Management ────────────────────────────────────
+  async getHires(): Promise<any[]> {
+    const res = await fetch(`${API_BASE_URL}/admin/hires`, {
+      headers: this.getAuthHeaders(),
+    });
+    if (!res.ok) return [];
+    return res.json();
+  }
+
+  async createHire(data: {
+    riderId: string;
+    riderName: string;
+    customerId: string;
+    customerName: string;
+    distanceKm: number;
+    durationMinutes: number;
+    fee: number;
+    vehicleType: string;
+    vehicleNumber: string;
+  }): Promise<any> {
+    const res = await fetch(`${API_BASE_URL}/admin/hires`, {
+      method: 'POST',
+      headers: this.getAuthHeaders(),
+      body: JSON.stringify(data),
+    });
+    if (!res.ok) throw new Error('Failed to create hire');
+    return res.json();
+  }
+
+  async deleteHire(id: string): Promise<void> {
+    await fetch(`${API_BASE_URL}/admin/hires/${id}`, {
+      method: 'DELETE',
+      headers: this.getAuthHeaders(),
+    });
+  }
 }
 
 export const adminApi = new AdminApiService();

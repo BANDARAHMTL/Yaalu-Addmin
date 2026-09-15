@@ -15,6 +15,7 @@ import { FareEngine } from './pages/FareEngine';
 import { CommissionManagement } from './pages/CommissionManagement';
 import { BidManagement } from './pages/BidManagement';
 import { Login } from './pages/Login';
+import { HireManagement } from './pages/HireManagement';
 import { adminApi } from './services/api';
 import {
   Customer,
@@ -54,6 +55,7 @@ export function App() {
   const [orders, setOrders] = useState<Order[]>([]);
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [customers, setCustomers] = useState<Customer[]>([]);
+  const [hires, setHires] = useState<any[]>([]);
 
   const loadAllData = async () => {
     try {
@@ -78,6 +80,11 @@ export function App() {
       setOrders(o);
       setInvoices(inv);
       setCustomers(c);
+      // Load hires separately
+      try {
+        const h = await adminApi.getHires();
+        setHires(h);
+      } catch (_) {}
     } finally {
       setIsRefreshing(false);
     }
@@ -254,6 +261,8 @@ export function App() {
         return { title: 'Invoices & Settlements', subtitle: 'Merchant billing, payment receipts, and collections' };
       case 'customers':
         return { title: 'Customer Base', subtitle: 'Shopper profiles, spend analytics, and communication' };
+      case 'hire_mgmt':
+        return { title: 'Hire Management', subtitle: 'View registered customer and rider hire records with all trip details' };
       case 'settings':
         return { title: 'System & Cloud Storage', subtitle: 'Cloudinary credentials, API diagnostics, and health' };
       default:
@@ -380,6 +389,17 @@ export function App() {
             onUpdateCustomer={handleUpdateCustomer}
             onUpdateCardDetails={handleUpdateCustomerCardDetails}
             searchTerm={searchTerm}
+          />
+        )}
+
+        {activeTab === 'hire_mgmt' && (
+          <HireManagement
+            hires={hires}
+            searchTerm={searchTerm}
+            onRefresh={async () => {
+              const h = await adminApi.getHires();
+              setHires(h);
+            }}
           />
         )}
 

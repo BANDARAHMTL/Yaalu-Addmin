@@ -52,9 +52,22 @@ export const BidManagement: React.FC<BidManagementProps> = ({ onNotify }) => {
       const data = await adminApi.getFareSettings();
       if (Array.isArray(data) && data.length > 0) {
         setSettings(data);
+      } else {
+        setSettings([
+          { id: '1', vehicleType: 'THREE_WHEEL', vehicleName: 'Three-Wheeler', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 25, otherRunningCostPerKm: 5, fixedCostPerKm: 2, profitMultiplier: 3, baseChargeFirstKm: 150, minimumFare: 150, commissionPercent: 10, bidTimeoutMinutes: 2.0, isActive: true },
+          { id: '2', vehicleType: 'MOTORBIKE', vehicleName: 'Bike / Courier', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 40, otherRunningCostPerKm: 3, fixedCostPerKm: 1, profitMultiplier: 3, baseChargeFirstKm: 100, minimumFare: 100, commissionPercent: 10, bidTimeoutMinutes: 2.0, isActive: true },
+          { id: '3', vehicleType: 'CAR', vehicleName: 'Car / Taxi', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 12, otherRunningCostPerKm: 10, fixedCostPerKm: 5, profitMultiplier: 3, baseChargeFirstKm: 200, minimumFare: 200, commissionPercent: 12, bidTimeoutMinutes: 3.0, isActive: true },
+          { id: '4', vehicleType: 'VAN', vehicleName: 'Van / Cargo', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 8, otherRunningCostPerKm: 15, fixedCostPerKm: 8, profitMultiplier: 3, baseChargeFirstKm: 300, minimumFare: 300, commissionPercent: 15, bidTimeoutMinutes: 5.0, isActive: true },
+        ]);
       }
     } catch (err) {
       console.warn('Failed to load bid settings:', err);
+      setSettings([
+        { id: '1', vehicleType: 'THREE_WHEEL', vehicleName: 'Three-Wheeler', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 25, otherRunningCostPerKm: 5, fixedCostPerKm: 2, profitMultiplier: 3, baseChargeFirstKm: 150, minimumFare: 150, commissionPercent: 10, bidTimeoutMinutes: 2.0, isActive: true },
+        { id: '2', vehicleType: 'MOTORBIKE', vehicleName: 'Bike / Courier', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 40, otherRunningCostPerKm: 3, fixedCostPerKm: 1, profitMultiplier: 3, baseChargeFirstKm: 100, minimumFare: 100, commissionPercent: 10, bidTimeoutMinutes: 2.0, isActive: true },
+        { id: '3', vehicleType: 'CAR', vehicleName: 'Car / Taxi', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 12, otherRunningCostPerKm: 10, fixedCostPerKm: 5, profitMultiplier: 3, baseChargeFirstKm: 200, minimumFare: 200, commissionPercent: 12, bidTimeoutMinutes: 3.0, isActive: true },
+        { id: '4', vehicleType: 'VAN', vehicleName: 'Van / Cargo', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 8, otherRunningCostPerKm: 15, fixedCostPerKm: 8, profitMultiplier: 3, baseChargeFirstKm: 300, minimumFare: 300, commissionPercent: 15, bidTimeoutMinutes: 5.0, isActive: true },
+      ]);
     } finally {
       setLoading(false);
     }

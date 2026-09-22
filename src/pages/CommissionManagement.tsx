@@ -39,9 +39,22 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
       const data = await adminApi.getFareSettings();
       if (Array.isArray(data) && data.length > 0) {
         setSettings(data);
+      } else {
+        setSettings([
+          { id: '1', vehicleType: 'THREE_WHEEL', vehicleName: 'Three-Wheeler', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 25, otherRunningCostPerKm: 5, fixedCostPerKm: 2, profitMultiplier: 3, baseChargeFirstKm: 150, minimumFare: 150, commissionPercent: 10, isActive: true },
+          { id: '2', vehicleType: 'MOTORBIKE', vehicleName: 'Bike / Courier', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 40, otherRunningCostPerKm: 3, fixedCostPerKm: 1, profitMultiplier: 3, baseChargeFirstKm: 100, minimumFare: 100, commissionPercent: 10, isActive: true },
+          { id: '3', vehicleType: 'CAR', vehicleName: 'Car / Taxi', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 12, otherRunningCostPerKm: 10, fixedCostPerKm: 5, profitMultiplier: 3, baseChargeFirstKm: 200, minimumFare: 200, commissionPercent: 12, isActive: true },
+          { id: '4', vehicleType: 'VAN', vehicleName: 'Van / Cargo', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 8, otherRunningCostPerKm: 15, fixedCostPerKm: 8, profitMultiplier: 3, baseChargeFirstKm: 300, minimumFare: 300, commissionPercent: 15, isActive: true },
+        ]);
       }
     } catch (err) {
       console.warn('Failed to load commission settings:', err);
+      setSettings([
+        { id: '1', vehicleType: 'THREE_WHEEL', vehicleName: 'Three-Wheeler', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 25, otherRunningCostPerKm: 5, fixedCostPerKm: 2, profitMultiplier: 3, baseChargeFirstKm: 150, minimumFare: 150, commissionPercent: 10, isActive: true },
+        { id: '2', vehicleType: 'MOTORBIKE', vehicleName: 'Bike / Courier', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 40, otherRunningCostPerKm: 3, fixedCostPerKm: 1, profitMultiplier: 3, baseChargeFirstKm: 100, minimumFare: 100, commissionPercent: 10, isActive: true },
+        { id: '3', vehicleType: 'CAR', vehicleName: 'Car / Taxi', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 12, otherRunningCostPerKm: 10, fixedCostPerKm: 5, profitMultiplier: 3, baseChargeFirstKm: 200, minimumFare: 200, commissionPercent: 12, isActive: true },
+        { id: '4', vehicleType: 'VAN', vehicleName: 'Van / Cargo', petrolPrice: 350, twoTOilRatio: 0, twoTOilPrice: 0, mileageKmPerLitre: 8, otherRunningCostPerKm: 15, fixedCostPerKm: 8, profitMultiplier: 3, baseChargeFirstKm: 300, minimumFare: 300, commissionPercent: 15, isActive: true },
+      ]);
     } finally {
       setLoading(false);
     }
@@ -134,7 +147,7 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
         <div className="card" style={{ padding: 16 }}>
           <div className="flex items-center justify-between" style={{ color: 'var(--text-muted)', fontSize: 12 }}>
             <span>Bike / Courier Rate</span>
-            <Bike size={16} color="#10B981" />
+            <Bike size={16} color="#f7ea00ff" />
           </div>
           <div style={{ fontSize: 22, fontWeight: 900, color: '#10B981', marginTop: 8 }}>
             {settings.find((s) => s.vehicleType === 'MOTORBIKE')?.commissionPercent ?? 10}%
@@ -209,13 +222,13 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
                           justifyContent: 'center',
                         }}
                       >
-                        <Icon size={20} color="var(--color-primary)" />
+                        <Icon size={50} color="var(--color-primary)" />
                       </div>
                       <div>
                         <div style={{ fontWeight: 800, fontSize: 14, color: '#FFF' }}>
                           {setting.vehicleName}
                         </div>
-                        <div style={{ fontSize: 11, color: 'var(--text-muted)' }}>
+                        <div style={{ fontSize: 19, color: '#400000ff' }}>
                           Category ID: <code>{setting.vehicleType}</code>
                         </div>
                       </div>
@@ -243,7 +256,7 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
 
                   <div className="grid grid-cols-2 gap-4" style={{ alignItems: 'center' }}>
                     <div>
-                      <label style={{ display: 'block', fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>
+                      <label style={{ display: 'block', fontSize: 22, color: 'var(--text-secondary)', marginBottom: 4 }}>
                         Yaalu Platform Share (%):
                       </label>
                       <div style={{ position: 'relative' }}>
@@ -273,7 +286,7 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
                             position: 'absolute',
                             right: 10,
                             top: 9,
-                            fontSize: 12,
+                            fontSize: 16,
                             fontWeight: 800,
                             color: 'var(--color-primary)',
                           }}
@@ -291,11 +304,11 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
                         border: '1px solid rgba(16, 185, 129, 0.2)',
                       }}
                     >
-                      <div style={{ fontSize: 11, color: '#10B981', fontWeight: 700 }}>
+                      <div style={{ fontSize: 18, color: '#000000ff', fontWeight: 700 }}>
                         🛵 Rider Net Share
                       </div>
-                      <div style={{ fontSize: 16, fontWeight: 900, color: '#10B981', marginTop: 2 }}>
-                        {riderPercent}% <span style={{ fontSize: 11, fontWeight: 600 }}>of trip fare</span>
+                      <div style={{ fontSize: 19, fontWeight: 900, color: '#0e008cff', marginTop: 2 }}>
+                        {riderPercent}% <span style={{ fontSize: 18, fontWeight: 600 }}>of trip fare</span>
                       </div>
                     </div>
                   </div>
@@ -347,10 +360,10 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
                     {s.vehicleType === 'THREE_WHEEL'
                       ? 'Tuk Tuk'
                       : s.vehicleType === 'MOTORBIKE'
-                      ? 'Bike'
-                      : s.vehicleType === 'CAR'
-                      ? 'Car'
-                      : 'Van'}
+                        ? 'Bike'
+                        : s.vehicleType === 'CAR'
+                          ? 'Car'
+                          : 'Van'}
                   </button>
                 ))}
               </div>

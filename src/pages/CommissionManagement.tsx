@@ -323,13 +323,13 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
           <div
             className="card"
             style={{
-              background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)',
-              border: '1px solid rgba(245, 199, 72, 0.3)',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.95) 100%)',
+              border: '5px solid rgba(0, 0, 0, 1)',
               padding: 20,
             }}
           >
             <div className="flex items-center justify-between" style={{ marginBottom: 14 }}>
-              <div className="flex items-center gap-2" style={{ fontWeight: 800, fontSize: 14, color: 'var(--color-primary)' }}>
+              <div className="flex items-center gap-2" style={{ fontWeight: 800, fontSize: 16, color: '#0d00ffff' }}>
                 <TrendingUp size={18} /> Live Commission Revenue Calculator
               </div>
               <span className="badge badge-warning">Simulated</span>
@@ -337,7 +337,7 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
 
             {/* Vehicle Selector */}
             <div style={{ marginBottom: 16 }}>
-              <label style={{ display: 'block', fontSize: 12, color: 'var(--text-secondary)', marginBottom: 6 }}>
+              <label style={{ display: 'block', fontSize: 18, color: '#000000ff', marginBottom: 6 }}>
                 Select Vehicle Category:
               </label>
               <div style={{ display: 'flex', gap: 6 }}>
@@ -349,7 +349,7 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
                       flex: 1,
                       padding: '8px 6px',
                       borderRadius: 8,
-                      border: 'none',
+                      border: '1px solid #000000ff',
                       background: selectedVehicle === s.vehicleType ? 'var(--color-primary)' : 'rgba(255,255,255,0.06)',
                       color: selectedVehicle === s.vehicleType ? '#0F172A' : 'var(--text-secondary)',
                       fontWeight: selectedVehicle === s.vehicleType ? 800 : 600,
@@ -386,7 +386,7 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
                 style={{ width: '100%', accentColor: 'var(--color-primary)', cursor: 'pointer' }}
               />
 
-              <div className="flex items-center justify-between" style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 4 }}>
+              <div className="flex items-center justify-between" style={{ fontSize: 12.5, color: '#000000ff', marginTop: 4 }}>
                 <span>Rs. 150</span>
                 <span>Rs. 2,500</span>
                 <span>Rs. 5,000</span>
@@ -397,10 +397,10 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
             {/* Split Output Card */}
             <div
               style={{
-                background: 'rgba(0,0,0,0.35)',
+                background: 'rgba(255, 255, 255, 1)',
                 padding: 16,
                 borderRadius: 12,
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '2px solid rgba(0, 0, 0, 1)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 10,
@@ -422,14 +422,15 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
                 }}
               >
                 <div>
-                  <div style={{ color: 'var(--color-primary)', fontWeight: 800 }}>
+                  <div style={{ color: 'rgba(55, 0, 255, 1)', fontWeight: 800 }}>
                     💼 Yaalu Commission ({commPercent}%)
                   </div>
                   <div style={{ fontSize: 10, color: 'var(--text-muted)' }}>Platform Net Profit</div>
                 </div>
-                <div style={{ fontSize: 16, fontWeight: 900, color: 'var(--color-primary)' }}>
+                <div style={{ fontSize: 16, fontWeight: 900, color: 'rgba(255, 115, 0, 1)' }}>
                   + LKR {yaaluRevenue.toFixed(2)}
                 </div>
+
               </div>
 
               <div
@@ -438,8 +439,8 @@ export const CommissionManagement: React.FC<CommissionManagementProps> = ({ onNo
                   fontSize: 13,
                   padding: '8px 10px',
                   borderRadius: 8,
-                  background: 'rgba(16, 185, 129, 0.1)',
-                  border: '1px solid rgba(16, 185, 129, 0.25)',
+                  background: 'rgba(255, 255, 255, 1)',
+                  border: '2px solid rgba(5, 255, 172, 0.25)',
                 }}
               >
                 <div>

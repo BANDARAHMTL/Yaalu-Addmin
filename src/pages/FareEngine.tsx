@@ -325,13 +325,13 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
       <div
         className="card"
         style={{
-          background: 'linear-gradient(135deg, rgba(15, 23, 42, 0.95) 0%, rgba(30, 41, 59, 0.95) 100%)',
-          border: '1px solid rgba(245, 199, 72, 0.25)',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(249, 251, 255, 0.95) 100%)',
+          border: '1px solid rgba(0, 0, 0, 0.25)',
           padding: 20,
         }}
       >
         <div className="flex items-center justify-between" style={{ marginBottom: 14 }}>
-          <div className="flex items-center gap-2" style={{ fontWeight: 800, fontSize: 14, color: 'var(--color-primary)' }}>
+          <div className="flex items-center gap-2" style={{ fontWeight: 800, fontSize: 14, color: "#000000ff" }}>
             <Compass size={18} /> Official Formula Steps (Standard Distance Pricing)
           </div>
           <span className="badge badge-warning" style={{ fontWeight: 800 }}>
@@ -342,65 +342,65 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
         <div className="grid grid-cols-5 gap-2.5" style={{ fontSize: 12 }}>
           {/* Step 1 */}
           <div style={{ background: 'rgba(255,255,255,0.04)', padding: 12, borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: "#4005ffff", textTransform: 'uppercase' }}>
               Step 1: Fuel Mixture
             </div>
-            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: '#FFF', marginTop: 4 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: '#290202ff', marginTop: 4 }}>
               A = B + C × D
             </div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-              Petrol + 2T oil cost: <strong style={{ color: '#10B981' }}>LKR {A.toFixed(2)}/L</strong>
+            <div style={{ fontSize: 15, color: '#000000ff', marginTop: 4 }}>
+              Petrol + 2T oil cost: <strong style={{ color: '#0fb54cff' }}>LKR {A.toFixed(2)}/L</strong>
             </div>
           </div>
 
           {/* Step 2 */}
           <div style={{ background: 'rgba(255,255,255,0.04)', padding: 12, borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: '#4005ffff', textTransform: 'uppercase' }}>
               Step 2: Fuel Cost / km
             </div>
-            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: '#FFF', marginTop: 4 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: '#000000ff', marginTop: 4 }}>
               E = A / F
             </div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+            <div style={{ fontSize: 15, color: '#000000ff', marginTop: 4 }}>
               Cost per km fuel: <strong style={{ color: '#10B981' }}>LKR {E.toFixed(2)}/km</strong>
             </div>
           </div>
 
           {/* Step 3 */}
           <div style={{ background: 'rgba(255,255,255,0.04)', padding: 12, borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: '#4005ffff', textTransform: 'uppercase' }}>
               Step 3: Driver Cost / km
             </div>
-            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: '#FFF', marginTop: 4 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: '#000000ff', marginTop: 4 }}>
               I = E + G + H
             </div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-              True operating cost: <strong style={{ color: '#F59E0B' }}>LKR {I.toFixed(2)}/km</strong>
+            <div style={{ fontSize: 15, color: '#000000ff', marginTop: 4 }}>
+              True operating cost: <strong style={{ color: '#0fb54cff' }}>LKR {I.toFixed(2)}/km</strong>
             </div>
           </div>
 
           {/* Step 4 */}
           <div style={{ background: 'rgba(255,255,255,0.04)', padding: 12, borderRadius: 10, border: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: '#4005ffff', textTransform: 'uppercase' }}>
               Step 4: Rate Charged / km
             </div>
-            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: '#FFF', marginTop: 4 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: '#000000ff', marginTop: 4 }}>
               J = 3 × I
             </div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-              Customer rate: <strong style={{ color: 'var(--color-primary)' }}>LKR {J.toFixed(2)}/km</strong>
+            <div style={{ fontSize: 15, color: '#000000ff', marginTop: 4 }}>
+              Customer rate: <strong style={{ color: '#0fb54cff' }}>LKR {J.toFixed(2)}/km</strong>
             </div>
           </div>
 
           {/* Step 5 */}
           <div style={{ background: 'rgba(245, 199, 72, 0.08)', padding: 12, borderRadius: 10, border: '1px solid rgba(245, 199, 72, 0.3)' }}>
-            <div style={{ fontSize: 10, fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase' }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: '#4005ffff', textTransform: 'uppercase' }}>
               Step 5: Total Trip Fare
             </div>
-            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: 'var(--color-primary)', marginTop: 4 }}>
+            <div style={{ fontSize: 13, fontWeight: 800, fontFamily: 'monospace', color: '#000000ff', marginTop: 4 }}>
               L = K + J × (M - 1)
             </div>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+            <div style={{ fontSize: 15, color: '#000000ff', marginTop: 4 }}>
               1st km: <strong>LKR {K.toFixed(0)}</strong> + extra km rate
             </div>
           </div>
@@ -419,14 +419,14 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
 
           {/* Section 1: Fuel & Mixture Costs (B, C, D, F) */}
           <div>
-            <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase', marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#2c0000ff', textTransform: 'uppercase', marginBottom: 10 }}>
               Fuel & Lubricant Mixture Variables (B, C, D, F)
             </div>
 
             <div className="grid grid-cols-2 gap-3.5">
               {/* B: Petrol Price */}
               <div>
-                <label style={{ display: 'block', fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 11, color: 'var(--text-secondary)', marginBottom: 4 }}>
                   <strong>(B)</strong> Petrol Price per Litre (LKR):
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -439,7 +439,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: 'var(--text-primary)',
@@ -468,7 +468,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: 'var(--text-primary)',
@@ -497,7 +497,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: 'var(--text-primary)',
@@ -526,7 +526,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: 'var(--text-primary)',
@@ -544,7 +544,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
 
           {/* Section 2: Other Running Costs & Fixed Costs (G, H) */}
           <div style={{ paddingTop: 6, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase', marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#2c0000ff', textTransform: 'uppercase', marginBottom: 10 }}>
               Operating & Maintenance Costs (G, H)
             </div>
 
@@ -564,7 +564,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: 'var(--text-primary)',
@@ -593,7 +593,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: 'var(--text-primary)',
@@ -611,7 +611,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
 
           {/* Section 3: Base Fare & Profit Multiplier (K, Multiplier) */}
           <div style={{ paddingTop: 6, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-            <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase', marginBottom: 10 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#2c0000ff', textTransform: 'uppercase', marginBottom: 10 }}>
               Base Charge & Profit Multiplier (K, J)
             </div>
 
@@ -631,7 +631,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: 'var(--text-primary)',
@@ -660,7 +660,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.06)',
-                      border: '1px solid rgba(255,255,255,0.12)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: 'var(--text-primary)',
@@ -680,21 +680,21 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
           <div
             style={{
               paddingTop: 14,
-              borderTop: '1px solid rgba(255,255,255,0.08)',
+              borderTop: '1px solid rgba(0, 0, 0, 0.08)',
               background: 'rgba(245, 199, 72, 0.03)',
               padding: 14,
               borderRadius: 12,
-              border: '1px solid rgba(245, 199, 72, 0.2)',
+              border: '3px solid rgba(0, 0, 0, 1)',
             }}
           >
-            <div style={{ fontSize: 12, fontWeight: 800, color: 'var(--color-primary)', textTransform: 'uppercase', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
+            <div style={{ fontSize: 12, fontWeight: 800, color: '#2c0000ff', textTransform: 'uppercase', marginBottom: 10, display: 'flex', alignItems: 'center', gap: 6 }}>
               💼 Platform Commission (%) & Rider Bidding Time Limit
             </div>
 
             <div className="grid grid-cols-2 gap-3.5">
               {/* Platform Commission (%) */}
               <div>
-                <label style={{ display: 'block', fontSize: 12, color: 'var(--text-secondary)', marginBottom: 4 }}>
+                <label style={{ display: 'block', fontSize: 12, color: '#000000ff', marginBottom: 4 }}>
                   <strong>Yaalu Platform Commission (%):</strong>
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -709,7 +709,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.08)',
-                      border: '1px solid rgba(245, 199, 72, 0.3)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: 'var(--color-primary)',
@@ -717,11 +717,11 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                       fontWeight: 800,
                     }}
                   />
-                  <span style={{ position: 'absolute', right: 10, top: 9, fontSize: 12, fontWeight: 800, color: 'var(--color-primary)' }}>
+                  <span style={{ position: 'absolute', right: 10, top: 9, fontSize: 12, fontWeight: 800, color: '#6d2020ff' }}>
                     %
                   </span>
                 </div>
-                <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 4 }}>
+                <div style={{ fontSize: 12.5, color: 'var(--text-muted)', marginTop: 4 }}>
                   Company profit deducted from ride fare
                 </div>
               </div>
@@ -743,7 +743,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     style={{
                       width: '100%',
                       background: 'rgba(255,255,255,0.08)',
-                      border: '1px solid rgba(59, 130, 246, 0.3)',
+                      border: '3px solid rgba(0, 0, 0, 1)',
                       borderRadius: 8,
                       padding: '8px 12px',
                       color: '#60A5FA',
@@ -755,7 +755,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                     Mins ({bidTimeoutSeconds}s)
                   </span>
                 </div>
-                <div style={{ fontSize: 10.5, color: 'var(--text-muted)', marginTop: 4 }}>
+                <div style={{ fontSize: 12, color: 'var(--text-muted)', marginTop: 4 }}>
                   Countdown limit for riders to accept / bid
                 </div>
               </div>
@@ -822,19 +822,19 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
           <div
             className="card"
             style={{
-              background: 'linear-gradient(135deg, rgba(11, 16, 68, 0.8) 0%, rgba(15, 23, 42, 0.95) 100%)',
-              border: '1px solid rgba(59, 130, 246, 0.3)',
+              background: 'linear-gradient(135deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.95) 100%)',
+              border: '2px solid rgba(0, 0, 0, 1)',
               padding: 20,
             }}
           >
-            <div className="flex items-center gap-2" style={{ fontWeight: 800, fontSize: 14, color: '#60A5FA', marginBottom: 12 }}>
+            <div className="flex items-center gap-2" style={{ fontWeight: 800, fontSize: 14, color: '#06172bff', marginBottom: 12 }}>
               <Compass size={18} /> Live Trip Fare & Revenue Split Simulator
             </div>
 
             <div style={{ marginBottom: 16 }}>
-              <div className="flex items-center justify-between" style={{ fontSize: 12, marginBottom: 6 }}>
-                <span style={{ color: 'var(--text-secondary)' }}>Trip Distance <strong>(M)</strong>:</span>
-                <strong style={{ color: 'var(--color-primary)', fontSize: 15 }}>{simDistance.toFixed(1)} km</strong>
+              <div className="flex items-center justify-between" style={{ fontSize: 20, marginBottom: 6 }}>
+                <span style={{ color: '#000000ff' }}>Trip Distance <strong>(M)</strong>:</span>
+                <strong style={{ color: '#000f22ff', fontSize: 18 }}>{simDistance.toFixed(1)} km</strong>
               </div>
 
               <input
@@ -847,7 +847,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                 style={{ width: '100%', accentColor: 'var(--color-primary)', cursor: 'pointer' }}
               />
 
-              <div className="flex items-center justify-between" style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
+              <div className="flex items-center justify-between" style={{ fontSize: 15, color: '#1f0933ff', marginTop: 4 }}>
                 <span>0.5 km (Base)</span>
                 <span>10 km</span>
                 <span>25 km</span>
@@ -858,21 +858,21 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
             {/* Simulated Fare Output Box */}
             <div
               style={{
-                background: 'rgba(0,0,0,0.3)',
+                background: 'rgba(255, 255, 255, 1)',
                 padding: 14,
                 borderRadius: 12,
-                border: '1px solid rgba(255,255,255,0.08)',
+                border: '3px solid rgba(0, 0, 0, 1)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 8,
               }}
             >
-              <div className="flex items-center justify-between" style={{ fontSize: 12 }}>
+              <div className="flex items-center justify-between" style={{ fontSize: 15 }}>
                 <span style={{ color: 'var(--text-muted)' }}>1st km Base Charge (K):</span>
                 <span>Rs. {K.toFixed(2)}</span>
               </div>
 
-              <div className="flex items-center justify-between" style={{ fontSize: 12 }}>
+              <div className="flex items-center justify-between" style={{ fontSize: 15 }}>
                 <span style={{ color: 'var(--text-muted)' }}>
                   Extra Distance ({Math.max(0, M - 1).toFixed(1)} km × Rs. {J.toFixed(2)}):
                 </span>
@@ -894,7 +894,7 @@ export const FareEngine: React.FC<FareEngineProps> = ({ onNotify }) => {
                   </div>
                 </div>
 
-                <div style={{ fontSize: 24, fontWeight: 900, color: 'var(--color-primary)' }}>
+                <div style={{ fontSize: 24, fontWeight: 900, color: '#09681cff' }}>
                   LKR {L.toFixed(2)}
                 </div>
               </div>

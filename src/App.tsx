@@ -96,6 +96,13 @@ export function App() {
     }
   }, [currentUser]);
 
+  // Auto-refresh when switching to data-heavy tabs
+  useEffect(() => {
+    if (currentUser && ['users', 'merchants', 'riders', 'customers', 'orders', 'dashboard'].includes(activeTab)) {
+      loadAllData();
+    }
+  }, [activeTab]);
+
   const handleLogout = () => {
     adminApi.logout();
     setCurrentUser(null);
